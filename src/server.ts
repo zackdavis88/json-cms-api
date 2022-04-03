@@ -11,8 +11,8 @@ import { configureResponseHandlers } from './utils';
 import { configureRoutes } from './routes';
 
 // Extend the types availble on the Express request/response objects.
-/* eslint-disable @typescript-eslint/no-namespace */
 declare global {
+  /* eslint-disable-next-line @typescript-eslint/no-namespace */
   namespace Express {
     interface Response {
       fatalError: (message: string | typeof mongoose.Error) => Response;
@@ -20,6 +20,7 @@ declare global {
       notFoundError: (message: string) => Response;
       authenticationError: (message: string) => Response;
       authorizationError: (message: string) => Response;
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
       success: (message: string, data?: any) => Response;
     }
   }
