@@ -2,20 +2,20 @@ import fs from 'fs';
 import https from 'https';
 import http from 'http';
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, { NativeError } from 'mongoose';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
-import { PORT } from './config';
-import { DB_HOST, DB_PORT, DB_NAME, DB_OPTIONS } from './config/db';
+import { PORT } from '../config';
+import { DB_HOST, DB_PORT, DB_NAME, DB_OPTIONS } from '../config/db';
 import { configureResponseHandlers } from './utils';
-import { configureRoutes } from './routes';
+import { configureRoutes } from '../routes';
 
 // Extend the types availble on the Express request/response objects.
 declare global {
   /* eslint-disable-next-line @typescript-eslint/no-namespace */
   namespace Express {
     interface Response {
-      fatalError: (message: string | typeof mongoose.Error) => Response;
+      fatalError: (message: string | NativeError) => Response;
       validationError: (message: string) => Response;
       notFoundError: (message: string) => Response;
       authenticationError: (message: string) => Response;
@@ -63,14 +63,14 @@ db.once('open', () => {
 
   // Build an HTTP or HTTPS server depending on configs available.
   let server;
-  const certExists = fs.existsSync('./config/ssl/cert.pem');
-  const keyExists = fs.existsSync('./config/ssl/key.pem');
+  const certExists = fs.existsSync('../config/ssl/cert.pem');
+  const keyExists = fs.existsSync('../config/ssl/key.pem');
   const useHttps = certExists && keyExists;
   if (useHttps) {
     server = https.createServer(
       {
-        key: fs.readFileSync('./config/ssl/key.pem'),
-        cert: fs.readFileSync('./config/ssl/cert.pem'),
+        key: fs.readFileSync('../config/ssl/key.pem'),
+        cert: fs.readFileSync('../config/ssl/cert.pem'),
       },
       app,
     );

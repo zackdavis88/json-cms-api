@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { testRoutes } from './test';
+import { userRoutes } from './user';
 
 export const configureRoutes = (router: Router) => {
-  testRoutes(router);
+  userRoutes(router);
 };
