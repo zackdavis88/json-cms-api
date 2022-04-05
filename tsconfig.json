@@ -7,5 +7,6 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "outDir": "dist"
-  }
+  },
+  "exclude": ["test/*", "*.config.ts"]
 }
