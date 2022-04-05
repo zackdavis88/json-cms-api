@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { NativeError } from 'mongoose';
 
 /*
   NAME: Fatal Error
@@ -7,7 +8,7 @@ import { Response } from 'express';
         for an unknown reason.
 */
 const fatalError = (res: Response) => {
-  return (message: string) => {
+  return (message: string | NativeError) => {
     res.statusCode = 500;
     if (!res.headersSent) return res.json({ fatalError: message });
   };
