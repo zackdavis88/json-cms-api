@@ -1,1 +1,1 @@
-export { User, generateKey, generateHash, compareHash } from './user';
+export { User, UserInstance, generateKey, generateHash, compareHash } from './user';

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { User, generateKey, generateHash } from '../models';
+import { User, generateKey, generateHash } from '../../models';
 
-const create = (req: Request, res: Response) => {
+export const create = (req: Request, res: Response) => {
   const { username, password } = req.body;
   generateHash(password, (hashErr, hash) => {
     if (hashErr) {
@@ -33,8 +33,4 @@ const create = (req: Request, res: Response) => {
       res.success('user has been successfully created', userData);
     });
   });
-};
-
-export default {
-  create,
 };
