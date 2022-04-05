@@ -15,7 +15,7 @@ declare global {
   /* eslint-disable-next-line @typescript-eslint/no-namespace */
   namespace Express {
     interface Response {
-      fatalError: (message: string | NativeError) => Response;
+      fatalError: (message: string | NativeError | Error) => Response;
       validationError: (message: string) => Response;
       notFoundError: (message: string) => Response;
       authenticationError: (message: string) => Response;
