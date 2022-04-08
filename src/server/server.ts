@@ -9,11 +9,18 @@ import { PORT } from '../config';
 import { DB_HOST, DB_PORT, DB_NAME, DB_OPTIONS } from '../config/db';
 import { configureResponseHandlers } from './utils';
 import { configureRoutes } from '../routes';
+import { TokenData } from '../validation';
+import { UserInstance } from '../models';
 
 // Extend the types availble on the Express request/response objects.
 declare global {
   /* eslint-disable-next-line @typescript-eslint/no-namespace */
   namespace Express {
+    interface Request {
+      credentials: string[];
+      tokenData: TokenData;
+      user: UserInstance;
+    }
     interface Response {
       fatalError: (message: string | NativeError | Error) => Response;
       validationError: (message: string) => Response;

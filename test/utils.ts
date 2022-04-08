@@ -3,7 +3,11 @@ import fs from 'fs';
 import { User, UserInstance, generateHash, generateKey } from '../src/models';
 import { PORT } from '../src/config';
 import { DB_HOST, DB_PORT, DB_NAME, DB_OPTIONS } from '../src/config/db';
+import { SECRET } from '../src/config/auth';
+import jwt from 'jsonwebtoken';
 import mongoose, { Connection } from 'mongoose';
+export { Connection } from 'mongoose';
+export { UserInstance } from '../src/models';
 let cleanupUsernames: string[] = [];
 const databaseUrl = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
 let dbConnection: Connection = null;
@@ -80,4 +84,26 @@ export const getServerUrl = () => {
   const keyExists = fs.existsSync('../src/config/ssl/key.pem');
   const protocol = certExists && keyExists ? 'https' : 'http';
   return `${protocol}://localhost:${PORT}`;
+};
+
+interface DataOverride {
+  _id?: string;
+  apiKey?: string;
+  iat?: number;
+  exp?: number;
+}
+export const generateToken = (
+  user: UserInstance,
+  dataOverride: DataOverride = {},
+  secretOverride?: string,
+) => {
+  let tokenData = {
+    _id: user._id,
+    apiKey: user.apiKey,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3,
+  };
+  tokenData = { ...tokenData, ...dataOverride };
+  const token = jwt.sign(tokenData, secretOverride || SECRET);
+  return token;
 };
