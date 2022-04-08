@@ -7,6 +7,7 @@ import {
   createTestUser,
   cleanupTestRecords,
   addUsernameForCleanup,
+  Connection,
 } from '../utils';
 import request from 'supertest';
 const apiRoute = '/users';
@@ -14,7 +15,7 @@ const serverUrl = getServerUrl();
 
 describe('[User] Create', () => {
   describe(`POST ${apiRoute}`, () => {
-    let connection: mongoose.Connection;
+    let connection: Connection;
     let existingUsername: string;
     let payload: {
       username?: any;
