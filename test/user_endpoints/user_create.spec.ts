@@ -3,7 +3,7 @@ import assert from 'assert';
 import mongoose from 'mongoose';
 import {
   getServerUrl,
-  connectDB,
+  connectDatabase,
   createTestUser,
   cleanupTestRecords,
   addUsernameForCleanup,
@@ -23,7 +23,7 @@ describe('[User] Create', () => {
     };
 
     beforeAll(async () => {
-      connection = await connectDB();
+      connection = await connectDatabase();
       if (!connection) return 'could not connect to db';
 
       const existingUser = await createTestUser('Password1');

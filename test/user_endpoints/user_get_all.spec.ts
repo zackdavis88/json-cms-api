@@ -1,7 +1,7 @@
 import assert from 'assert';
 import {
   getServerUrl,
-  connectDB,
+  connectDatabase,
   createTestUser,
   cleanupTestRecords,
   generateToken,
@@ -19,7 +19,7 @@ describe('[User] Get All', () => {
     let authToken: string;
 
     beforeAll(async () => {
-      connection = await connectDB();
+      connection = await connectDatabase();
       if (!connection) return 'could not connect to db';
 
       testUser = await createTestUser('Password1');
