@@ -1,1 +1,1 @@
-export { PORT } from './app';
+export { PORT, ITEMS_PER_PAGE } from './app';

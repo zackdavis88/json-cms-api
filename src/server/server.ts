@@ -9,7 +9,7 @@ import { PORT } from '../config';
 import { DB_HOST, DB_PORT, DB_NAME, DB_OPTIONS } from '../config/db';
 import { configureResponseHandlers } from './utils';
 import { configureRoutes } from '../routes';
-import { TokenData } from '../validation';
+import { TokenData, PaginationData } from '../validation';
 import { UserInstance } from '../models';
 
 // Extend the types availble on the Express request/response objects.
@@ -21,6 +21,7 @@ declare global {
       tokenData: TokenData;
       user: UserInstance;
       requestedUser: UserInstance;
+      paginationData: PaginationData;
     }
     interface Response {
       fatalError: (message: string | NativeError | Error) => Response;
