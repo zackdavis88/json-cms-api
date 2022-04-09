@@ -20,6 +20,7 @@ declare global {
       credentials: string[];
       tokenData: TokenData;
       user: UserInstance;
+      requestedUser: UserInstance;
     }
     interface Response {
       fatalError: (message: string | NativeError | Error) => Response;
