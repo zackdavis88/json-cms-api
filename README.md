@@ -93,7 +93,7 @@ npm run start:prod
 
 ## Test Suite
 
-Everest comes with a complete unit test suite that can be ran using the following steps:
+JSON CMS API comes with a complete unit test suite that can be ran using the following steps:
 
 1. In one terminal start the JSON CMS API.
 
