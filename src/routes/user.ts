@@ -13,8 +13,17 @@ export const userRoutes = (router: Router) => {
       UserController.getAll,
     );
 
+  /* The order of functions here is done on purpose so that we never fetch a users data until the
+     request has been authorized.
+  */
   router
     .route('/users/:username')
     .all(AuthValidation.jwtHeader, AuthController.authenticateToken)
-    .get(UserValidation.getOne, UserController.getOne);
+    .get(UserValidation.getOne, UserController.getOne)
+    .post(
+      AuthController.authorizeUserUpdate,
+      UserValidation.getOne,
+      UserValidation.update,
+      UserController.update,
+    );
 };

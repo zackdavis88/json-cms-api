@@ -5,12 +5,11 @@ import { NativeError } from 'mongoose';
 type ValidateUsername = (
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   username: any,
-  isRequired?: boolean,
 ) => Promise<void | ValidationError>;
 
-export const validateUsername: ValidateUsername = (username, isRequired = true) =>
+export const validateUsername: ValidateUsername = (username) =>
   new Promise((resolve) => {
-    if (isRequired && isMissing(username)) {
+    if (isMissing(username)) {
       return resolve('username is missing from input');
     }
 
