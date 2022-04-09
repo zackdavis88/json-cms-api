@@ -25,5 +25,11 @@ export const userRoutes = (router: Router) => {
       UserValidation.getOne,
       UserValidation.update,
       UserController.update,
+    )
+    .delete(
+      AuthController.authorizeUserUpdate,
+      UserValidation.getOne,
+      UserValidation.remove,
+      UserController.remove,
     );
 };
