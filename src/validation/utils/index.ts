@@ -10,4 +10,5 @@ export {
   ModelInstanceTypes,
   QueryString,
   PaginationData,
+  TokenData,
 } from './types';

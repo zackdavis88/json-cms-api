@@ -1,7 +1,7 @@
-import { NativeError } from 'mongoose';
+import mongoose from 'mongoose';
 import { User, UserInstance } from '../../models';
 
-export type ValidationError = NativeError | string;
+export type ValidationError = mongoose.NativeError | string;
 
 export type ModelTypes = typeof User; // TODO: Add more models here as they are created.
 
@@ -27,4 +27,9 @@ export interface PaginationData {
   totalPages: number;
   itemsPerPage: number;
   pageOffset: number;
+}
+
+export interface TokenData {
+  _id: mongoose.Types.ObjectId;
+  apiKey: string;
 }

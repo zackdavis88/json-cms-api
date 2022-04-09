@@ -2,11 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { SECRET } from '../../config/auth';
-
-export interface TokenData {
-  _id: mongoose.Types.ObjectId;
-  apiKey: string;
-}
+import { TokenData } from '../utils';
 
 export const jwtHeader = (req: Request, res: Response, next: NextFunction) => {
   const header: string = req.headers['x-auth-token']
