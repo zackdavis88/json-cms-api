@@ -3,11 +3,6 @@ import { QueryArgs, escapeRegex } from '../../validation';
 import { Blueprint, UserInstance } from '../../models';
 import { getUserInfo } from '../utils';
 
-interface UserData {
-  username: string;
-  displayName: string;
-}
-
 export const getAll = (req: Request, res: Response) => {
   const { query } = req;
   const { page, totalItems, totalPages, itemsPerPage, pageOffset } = req.paginationData;
