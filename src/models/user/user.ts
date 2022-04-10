@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-interface User {
+export interface UserTypes {
   username: string;
   displayName: string;
   hash: string;
@@ -11,7 +11,7 @@ interface User {
   deletedOn?: Date;
 }
 
-const userSchema = new mongoose.Schema<User>({
+const UserSchema = new mongoose.Schema<UserTypes>({
   username: { type: String, unique: true },
   displayName: String,
   hash: String,
@@ -22,5 +22,5 @@ const userSchema = new mongoose.Schema<User>({
   deletedOn: Date,
 });
 
-export default mongoose.model<User>('User', userSchema);
-export interface UserInstance extends User, mongoose.Document {}
+export default mongoose.model<UserTypes>('User', UserSchema);
+export interface UserInstance extends UserTypes, mongoose.Document {}

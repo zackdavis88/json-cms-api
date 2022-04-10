@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, generateKey, generateHash } from '../../models';
+import { User, generateKey, generateHash, UserTypes } from '../../models';
 
 export const create = (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -8,7 +8,7 @@ export const create = (req: Request, res: Response) => {
       return res.fatalError(hashErr);
     }
 
-    const newUser = {
+    const newUser: UserTypes = {
       username: username.toLowerCase(),
       displayName: username,
       hash,
