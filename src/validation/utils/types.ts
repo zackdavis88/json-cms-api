@@ -36,6 +36,7 @@ export interface TokenData {
 
 type FieldTypes = 'STRING' | 'NUMBER' | 'BOOLEAN' | 'DATE' | 'ARRAY' | 'OBJECT';
 export interface BlueprintField {
+  _id: mongoose.Types.ObjectId;
   type: FieldTypes;
   name: string;
   isRequired?: boolean;

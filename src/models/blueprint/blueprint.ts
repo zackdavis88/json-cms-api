@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 type FieldTypes = 'STRING' | 'NUMBER' | 'BOOLEAN' | 'DATE' | 'ARRAY' | 'OBJECT';
 
 export interface BlueprintField {
+  _id?: mongoose.Types.ObjectId;
   type: FieldTypes;
   name: string;
   isRequired?: boolean;
@@ -26,17 +27,21 @@ export interface BlueprintTypes {
   fields: BlueprintField[];
 }
 
-const FieldSchema = new mongoose.Schema<BlueprintField>({
-  type: String,
-  name: String,
-  isRequired: Boolean,
-  isInteger: Boolean,
-  regex: String,
-  min: Number,
-  max: Number,
-  arrayOf: this,
-  fields: [this],
-});
+const FieldSchema = new mongoose.Schema<BlueprintField>(
+  {
+    _id: mongoose.Types.ObjectId,
+    type: String,
+    name: String,
+    isRequired: Boolean,
+    isInteger: Boolean,
+    regex: String,
+    min: Number,
+    max: Number,
+    arrayOf: this,
+    fields: [this],
+  },
+  { _id: false },
+);
 
 const BlueprintSchema = new mongoose.Schema<BlueprintTypes>({
   name: String,
