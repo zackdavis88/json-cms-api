@@ -292,7 +292,7 @@ describe('[Blueprint] Create', () => {
         );
     });
 
-    it('should reject requests when object-field name contains invalid characters', (done) => {
+    it('should reject requests when field-object name contains invalid characters', (done) => {
       payload.fields = [
         {
           type: 'ARRAY',
@@ -433,7 +433,7 @@ describe('[Blueprint] Create', () => {
         );
     });
 
-    it('should reject requests when an object-field object-type does not contain fields', (done) => {
+    it('should reject requests when an field-object object-type does not contain fields', (done) => {
       payload.fields = [{ type: 'OBJECT', name: 'testObject' }];
       request(serverUrl)
         .post(apiRoute)
@@ -448,7 +448,7 @@ describe('[Blueprint] Create', () => {
         );
     });
 
-    it('should reject requests when an object-field object-type contains an empty fields array', (done) => {
+    it('should reject requests when an field-object object-type contains an empty fields array', (done) => {
       payload.fields = [{ type: 'OBJECT', name: 'testObject', fields: [] }];
       request(serverUrl)
         .post(apiRoute)
@@ -464,7 +464,7 @@ describe('[Blueprint] Create', () => {
         );
     });
 
-    it('should reject requests when an object-field object-type contains an empty fields array', (done) => {
+    it('should reject requests when an field-object object-type contains an empty fields array', (done) => {
       payload.fields = [
         {
           type: 'OBJECT',
