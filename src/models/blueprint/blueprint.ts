@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 type FieldTypes = 'STRING' | 'NUMBER' | 'BOOLEAN' | 'DATE' | 'ARRAY' | 'OBJECT';
 
 export interface BlueprintField {
-  _id?: mongoose.Types.ObjectId;
+  id?: mongoose.Types.ObjectId;
   type: FieldTypes;
   name: string;
   isRequired?: boolean;
@@ -29,7 +29,7 @@ export interface BlueprintTypes {
 
 const FieldSchema = new mongoose.Schema<BlueprintField>(
   {
-    _id: mongoose.Types.ObjectId,
+    id: mongoose.Types.ObjectId,
     type: String,
     name: String,
     isRequired: Boolean,

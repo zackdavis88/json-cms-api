@@ -177,7 +177,7 @@ export const reduceFields: ReduceFields = (fields, fieldName) =>
         return {
           ...prev,
           fields: prev.fields.concat({
-            _id: new mongoose.Types.ObjectId(),
+            id: new mongoose.Types.ObjectId(),
             type,
             name,
             isRequired: typeof isRequired === 'boolean' ? isRequired : undefined,
@@ -193,6 +193,15 @@ export const reduceFields: ReduceFields = (fields, fieldName) =>
             error: `${
               fieldName || 'blueprint'
             } field object contains an object-type without fields`,
+          };
+        }
+
+        if (!Array.isArray(childrenFields)) {
+          return {
+            ...prev,
+            error: `${
+              fieldName || 'blueprint'
+            } field object fields must be an array of field objects`,
           };
         }
 
@@ -216,7 +225,7 @@ export const reduceFields: ReduceFields = (fields, fieldName) =>
         return {
           ...prev,
           fields: prev.fields.concat({
-            _id: new mongoose.Types.ObjectId(),
+            id: new mongoose.Types.ObjectId(),
             type,
             name,
             isRequired: typeof isRequired === 'boolean' ? isRequired : undefined,
@@ -228,7 +237,7 @@ export const reduceFields: ReduceFields = (fields, fieldName) =>
       return {
         ...prev,
         fields: prev.fields.concat({
-          _id: new mongoose.Types.ObjectId(),
+          id: new mongoose.Types.ObjectId(),
           type,
           name,
           isRequired: typeof isRequired === 'boolean' ? isRequired : undefined,
