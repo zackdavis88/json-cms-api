@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
-import { User, UserInstance } from '../../models';
 
 export type ValidationError = mongoose.NativeError | string;
 
-export type ModelTypes = typeof User; // TODO: Add more models here as they are created.
+export type ModelTypes = mongoose.Model<unknown>;
 
-export type ModelInstanceTypes = UserInstance; // TODO: add more model instances here as they are created.
+export type ModelInstanceTypes = mongoose.Document<unknown>;
 
 export interface QueryArgs {
   [key: string]: unknown;

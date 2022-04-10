@@ -3,6 +3,7 @@ export { default as AuthValidation } from './authentication';
 export { default as BlueprintValidation } from './blueprint';
 
 export {
+  escapeRegex,
   ValidationError,
   ModelTypes,
   QueryArgs,
