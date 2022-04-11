@@ -18,8 +18,32 @@ const FIELD_TYPES = {
   OBJECT: 'OBJECT',
 };
 
-export const reduceFields: ReduceFields = (fields, fieldName) =>
-  fields.reduce<ReduceFieldsOutput>(
+export const reduceFields: ReduceFields = (fields, fieldName) => {
+  /*
+    This recursive method is responsible for:
+      1. Validating the fields array contains no items with duplicate names.
+      2. Validating each of the fields array items.
+  */
+  const fieldNames = fields.map((field) => field.name || '');
+  let duplicateFieldName = '';
+  const hasDuplicate = fieldNames.some((fieldName) => {
+    const isDuplicate =
+      fieldNames.indexOf(fieldName) !== fieldNames.lastIndexOf(fieldName);
+    if (isDuplicate) {
+      duplicateFieldName = fieldName;
+    }
+    return isDuplicate;
+  });
+
+  if (hasDuplicate) {
+    return {
+      error: `${
+        fieldName || 'blueprint'
+      } fields contains duplicate name value: ${duplicateFieldName}`,
+    };
+  }
+
+  return fields.reduce<ReduceFieldsOutput>(
     (prev, field) => {
       // Bail on validation if we found an error.
       if (prev.error) {
@@ -250,3 +274,4 @@ export const reduceFields: ReduceFields = (fields, fieldName) =>
     },
     { error: '', fields: [] },
   );
+};

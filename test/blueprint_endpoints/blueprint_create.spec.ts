@@ -485,6 +485,33 @@ describe('[Blueprint] Create', () => {
         );
     });
 
+    it('should reject requests when fields contains field-objects with duplicate names', (done) => {
+      const duplicateName = 'testObject';
+      payload.fields = [
+        {
+          type: 'OBJECT',
+          name: duplicateName,
+          fields: [{ type: 'STRING', name: 'testStringNested', fields: [] }],
+        },
+        {
+          type: 'OBJECT',
+          name: duplicateName,
+          fields: [{ type: 'STRING', name: 'testStringNested', fields: [] }],
+        },
+      ];
+      request(serverUrl)
+        .post(apiRoute)
+        .set('x-auth-token', authToken)
+        .send(payload)
+        .expect(
+          400,
+          {
+            error: `blueprint fields contains duplicate name value: ${duplicateName}`,
+          },
+          done,
+        );
+    });
+
     it('should successfully create a new blueprint', (done) => {
       const successPayload: BlueprintCreatePayload = {
         ...payload,
