@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { getPaginationData, QueryString, QueryArgs, escapeRegex } from '../utils';
-import { User } from '../../models';
+import { Blueprint } from '../../models';
 
 interface CountQueryArgs extends QueryArgs {
   isActive: boolean;
@@ -20,7 +20,7 @@ export const getAll = async (req: Request, res: Response, next: NextFunction) =>
     };
   }
   const { error, paginationData } = await getPaginationData(
-    User,
+    Blueprint,
     countQueryArgs,
     queryStringInput as QueryString,
   );

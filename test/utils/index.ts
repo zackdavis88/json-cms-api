@@ -7,8 +7,18 @@ export {
 export { getServerUrl } from './get_server_url';
 export { createTestUser } from './create_test_user';
 export { generateToken } from './generate_token';
+export { createTestBlueprint } from './create_test_blueprint';
 
-export { UserInstance, BlueprintInstance, BlueprintField } from '../../src/models';
+export {
+  UserInstance,
+  BlueprintInstance,
+  BlueprintField,
+  BlueprintTypes,
+} from '../../src/models';
 export { Connection } from 'mongoose';
 
-export { blueprintCreatePayload, BlueprintCreatePayload } from './data';
+export {
+  blueprintCreatePayload,
+  BlueprintCreatePayload,
+  defaultBlueprintFields,
+} from './data';
