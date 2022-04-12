@@ -32,7 +32,7 @@ export const createTestBlueprint = (
     Blueprint.create(testBlueprint, (createErr, blueprint: BlueprintInstance) => {
       if (createErr) return console.error(createErr);
 
-      addBlueprintForCleanup(blueprint.id);
+      addBlueprintForCleanup(blueprint._id);
       resolve(blueprint);
     });
   });

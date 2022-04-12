@@ -38,7 +38,7 @@ const FieldSchema = new mongoose.Schema<BlueprintField>(
     min: Number,
     max: Number,
     arrayOf: this,
-    fields: [this],
+    fields: { type: [this], default: undefined },
   },
   { _id: false },
 );

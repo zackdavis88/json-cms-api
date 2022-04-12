@@ -8,7 +8,6 @@ export const getOne = (req: Request, res: Response) => {
     blueprint: {
       id: requestedBlueprint._id,
       name: requestedBlueprint.name,
-      isActive: requestedBlueprint.isActive,
       createdOn: requestedBlueprint.createdOn,
       updatedOn: requestedBlueprint.updatedOn,
       deletedOn: requestedBlueprint.deletedOn,
