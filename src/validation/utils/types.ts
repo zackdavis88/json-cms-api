@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import { BlueprintInstance } from '../../models';
 export type ValidationError = mongoose.NativeError | string;
 
 export type ModelTypes = mongoose.Model<unknown>;
@@ -45,4 +45,15 @@ export interface BlueprintField {
   max?: number;
   arrayOf?: BlueprintField;
   fields?: BlueprintField[];
+}
+
+interface UserInfo {
+  username?: string;
+  displayName?: string;
+}
+
+export interface PopulatedBlueprintInstance
+  extends Omit<BlueprintInstance, 'createdBy' | 'updatedBy'> {
+  createdBy?: UserInfo;
+  updatedBy?: UserInfo;
 }

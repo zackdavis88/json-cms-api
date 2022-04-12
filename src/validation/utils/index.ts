@@ -13,4 +13,5 @@ export {
   PaginationData,
   TokenData,
   BlueprintField,
+  PopulatedBlueprintInstance,
 } from './types';

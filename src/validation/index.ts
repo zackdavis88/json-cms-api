@@ -12,4 +12,5 @@ export {
   QueryString,
   PaginationData,
   TokenData,
+  PopulatedBlueprintInstance,
 } from './utils';

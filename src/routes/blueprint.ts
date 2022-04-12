@@ -8,4 +8,13 @@ export const blueprintRoutes = (router: Router) => {
     .all(AuthValidation.jwtHeader, AuthController.authenticateToken)
     .post(BlueprintValidation.create, BlueprintController.create)
     .get(BlueprintValidation.getAll, BlueprintController.getAll);
+
+  router
+    .route('/blueprints/:blueprintId')
+    .all(
+      AuthValidation.jwtHeader,
+      AuthController.authenticateToken,
+      BlueprintValidation.getOne,
+    )
+    .get(BlueprintController.getOne);
 };

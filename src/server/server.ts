@@ -9,7 +9,7 @@ import { PORT } from '../config';
 import { DB_HOST, DB_PORT, DB_NAME, DB_OPTIONS } from '../config/db';
 import { configureResponseHandlers } from './utils';
 import { configureRoutes } from '../routes';
-import { TokenData, PaginationData } from '../validation';
+import { TokenData, PaginationData, PopulatedBlueprintInstance } from '../validation';
 import { UserInstance, BlueprintField } from '../models';
 
 // Extend the types availble on the Express request/response objects.
@@ -23,6 +23,7 @@ declare global {
       requestedUser: UserInstance;
       paginationData: PaginationData;
       sanitizedFields: BlueprintField[];
+      requestedBlueprint: PopulatedBlueprintInstance;
     }
     interface Response {
       fatalError: (message: string | NativeError | Error) => Response;
