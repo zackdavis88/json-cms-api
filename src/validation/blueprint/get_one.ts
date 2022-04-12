@@ -8,7 +8,7 @@ export const getOne = async (req: Request, res: Response, next: NextFunction) =>
     _id: blueprintId,
     isActive: true,
   };
-  const notFoundMsg = 'requested user not found';
+  const notFoundMsg = 'requested blueprint not found';
   const options = {
     populate: {
       createdBy: '-_id username displayName',
