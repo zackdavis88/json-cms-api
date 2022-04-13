@@ -10,10 +10,8 @@ export const getOne = (req: Request, res: Response) => {
       name: requestedBlueprint.name,
       createdOn: requestedBlueprint.createdOn,
       updatedOn: requestedBlueprint.updatedOn,
-      deletedOn: requestedBlueprint.deletedOn,
       createdBy: getUserInfo(requestedBlueprint, 'createdBy'),
       updatedBy: getUserInfo(requestedBlueprint, 'updatedBy'),
-      deletedBy: getUserInfo(requestedBlueprint, 'deletedBy'),
       fields: requestedBlueprint.fields,
     },
   };

@@ -9,6 +9,7 @@ import {
   Connection,
   UserInstance,
   BlueprintInstance,
+  defaultBlueprintFields,
 } from '../utils';
 import request from 'supertest';
 let apiRoute = '/blueprints/:blueprintId';
@@ -85,13 +86,10 @@ describe('[Blueprint] Get One', () => {
           assert.strictEqual(createdBy.username, testUser.username);
           assert.strictEqual(createdBy.displayName, testUser.displayName);
 
-          /*
-          TODO: Find a better way to test that fields is equal to the testBlueprint. I couldnt find a way
-                to make deepEqual or strictDeepEqual to work.
-          */
           assert(fields);
           assert(Array.isArray(fields));
           assert.strictEqual(fields.length, testBlueprint.fields.length);
+          assert.deepEqual(fields, defaultBlueprintFields.fields);
           done();
         });
     });
