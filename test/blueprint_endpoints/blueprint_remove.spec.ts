@@ -11,7 +11,6 @@ import {
   BlueprintInstance,
 } from '../utils';
 import request from 'supertest';
-import { Blueprint } from '../../src/models';
 let apiRoute = '/blueprints/:blueprintId';
 const serverUrl = getServerUrl();
 
