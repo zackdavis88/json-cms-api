@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateName, validateFields } from './utils';
+import { validateFields } from './utils';
+import { validateName } from '../utils';
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   const { name, fields } = req.body;
