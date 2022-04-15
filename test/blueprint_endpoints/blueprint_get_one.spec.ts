@@ -75,7 +75,7 @@ describe('[Blueprint] Get One', () => {
           assert.strictEqual(message, 'blueprint has been successfully retrieved');
           assert(blueprint);
 
-          const { id, name, createdOn, createdBy, fields } = blueprint;
+          const { id, name, createdOn, createdBy, fields, version } = blueprint;
           assert.strictEqual(id, testBlueprint.id);
           assert.strictEqual(name, testBlueprint.name);
           assert.strictEqual(
@@ -90,6 +90,7 @@ describe('[Blueprint] Get One', () => {
           assert(Array.isArray(fields));
           assert.strictEqual(fields.length, testBlueprint.fields.length);
           assert.deepEqual(fields, defaultBlueprintFields.fields);
+          assert.strictEqual(version, 1);
           done();
         });
     });

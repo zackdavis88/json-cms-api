@@ -11,6 +11,7 @@ import { defaultBlueprintFields } from '../utils';
 interface BlueprintCreateOverrides {
   name?: string;
   fields?: BlueprintField[];
+  version?: number;
 }
 
 export const createTestBlueprint = (
@@ -20,6 +21,7 @@ export const createTestBlueprint = (
   new Promise<BlueprintInstance>((resolve) => {
     const name = overrides.name || new mongoose.Types.ObjectId().toString();
     const fields = overrides.fields || [...defaultBlueprintFields.fields];
+    const version = overrides.version || 1;
 
     const testBlueprint = {
       name,
@@ -27,6 +29,7 @@ export const createTestBlueprint = (
       isActive: true,
       createdOn: new Date(),
       createdBy: user._id,
+      version,
     };
 
     Blueprint.create(testBlueprint, (createErr, blueprint: BlueprintInstance) => {

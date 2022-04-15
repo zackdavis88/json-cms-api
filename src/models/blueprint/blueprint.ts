@@ -25,6 +25,7 @@ export interface BlueprintTypes {
   updatedBy?: mongoose.Schema.Types.ObjectId;
   deletedBy?: mongoose.Schema.Types.ObjectId;
   fields: BlueprintField[];
+  version: number;
 }
 
 const FieldSchema = new mongoose.Schema<BlueprintField>(
@@ -53,6 +54,7 @@ const BlueprintSchema = new mongoose.Schema<BlueprintTypes>({
   updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   deletedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   fields: [FieldSchema],
+  version: Number,
 });
 
 export default mongoose.model<BlueprintTypes>('Blueprint', BlueprintSchema);

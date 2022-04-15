@@ -13,6 +13,7 @@ export const getOne = (req: Request, res: Response) => {
       createdBy: getUserInfo(requestedBlueprint, 'createdBy'),
       updatedBy: getUserInfo(requestedBlueprint, 'updatedBy'),
       fields: requestedBlueprint.fields,
+      version: requestedBlueprint.version,
     },
   };
 

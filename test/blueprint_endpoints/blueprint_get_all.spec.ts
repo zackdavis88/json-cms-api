@@ -69,13 +69,14 @@ describe('[Blueprint] Get All', () => {
           assert(totalItems >= 10);
           assert(blueprints);
           assert(blueprints.length);
-          const { id, name, createdOn, createdBy } = blueprints[0];
+          const { id, name, createdOn, createdBy, version } = blueprints[0];
           assert(id);
           assert(name);
           assert(createdOn);
           const { username, displayName } = createdBy;
           assert(username);
           assert(displayName);
+          assert(version);
           done();
         });
     });

@@ -1,15 +1,33 @@
 import { Request, Response } from 'express';
 import { getUserInfo } from '../utils';
-export const update = (req: Request, res: Response) => {
+import { BlueprintVersion, BlueprintInstance } from '../../models';
+
+export const update = async (req: Request, res: Response) => {
   const { name } = req.body;
   const { sanitizedFields, requestedBlueprint, user } = req;
 
-  if (name) {
-    requestedBlueprint.name = name;
+  if (sanitizedFields) {
+    const newVersion = {
+      name: requestedBlueprint.name,
+      blueprintId: requestedBlueprint._id,
+      version: requestedBlueprint.version,
+      fields: requestedBlueprint.fields,
+      createdOn: new Date(),
+      createdBy: user._id,
+    };
+
+    try {
+      await BlueprintVersion.create(newVersion);
+    } catch (err) {
+      return res.fatalError(err);
+    }
+
+    requestedBlueprint.fields = sanitizedFields;
+    requestedBlueprint.version = requestedBlueprint.version + 1;
   }
 
-  if (sanitizedFields) {
-    requestedBlueprint.fields = sanitizedFields;
+  if (name) {
+    requestedBlueprint.name = name;
   }
 
   requestedBlueprint.updatedOn = new Date();
@@ -20,23 +38,25 @@ export const update = (req: Request, res: Response) => {
     displayName: user.displayName,
   };
 
-  requestedBlueprint.save((updateError, blueprint) => {
-    if (updateError) {
-      return res.fatalError(updateError);
-    }
+  let blueprint: BlueprintInstance;
+  try {
+    blueprint = await requestedBlueprint.save();
+  } catch (updateError) {
+    return res.fatalError(updateError);
+  }
 
-    const blueprintData = {
-      blueprint: {
-        id: blueprint._id,
-        name: blueprint.name,
-        createdOn: blueprint.createdOn,
-        updatedOn: blueprint.updatedOn,
-        createdBy: getUserInfo(requestedBlueprint, 'createdBy'),
-        updatedBy: updatedByData,
-        fields: blueprint.fields,
-      },
-    };
+  const blueprintData = {
+    blueprint: {
+      id: blueprint._id,
+      name: blueprint.name,
+      createdOn: blueprint.createdOn,
+      updatedOn: blueprint.updatedOn,
+      createdBy: getUserInfo(requestedBlueprint, 'createdBy'),
+      updatedBy: updatedByData,
+      fields: blueprint.fields,
+      version: blueprint.version,
+    },
+  };
 
-    return res.success('blueprint has been successfully updated', blueprintData);
-  });
+  return res.success('blueprint has been successfully updated', blueprintData);
 };

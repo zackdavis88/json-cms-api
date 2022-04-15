@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { Blueprint, BlueprintTypes } from '../../models';
+import { Blueprint, BlueprintTypes, BlueprintInstance } from '../../models';
 
-export const create = (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   const { name } = req.body;
   const { user, sanitizedFields } = req;
 
@@ -11,25 +11,29 @@ export const create = (req: Request, res: Response) => {
     createdOn: new Date(),
     createdBy: user._id,
     fields: sanitizedFields,
+    version: 1,
   };
-  Blueprint.create(newBlueprint, (createError, blueprint) => {
-    if (createError) {
-      return res.fatalError(createError);
-    }
 
-    const blueprintData = {
-      blueprint: {
-        id: blueprint._id,
-        name: blueprint.name,
-        createdOn: blueprint.createdOn,
-        createdBy: {
-          username: user.username,
-          displayName: user.displayName,
-        },
-        fields: blueprint.fields,
+  let blueprint: BlueprintInstance;
+  try {
+    blueprint = await Blueprint.create(newBlueprint);
+  } catch (createError) {
+    return res.fatalError(createError);
+  }
+
+  const blueprintData = {
+    blueprint: {
+      id: blueprint._id,
+      name: blueprint.name,
+      createdOn: blueprint.createdOn,
+      createdBy: {
+        username: user.username,
+        displayName: user.displayName,
       },
-    };
+      fields: blueprint.fields,
+      version: blueprint.version,
+    },
+  };
 
-    return res.success('blueprint has been successfully created', blueprintData);
-  });
+  return res.success('blueprint has been successfully created', blueprintData);
 };

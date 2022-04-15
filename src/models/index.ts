@@ -12,3 +12,4 @@ export {
   BlueprintField,
   BlueprintTypes,
 } from './blueprint';
+export { BlueprintVersion, BlueprintVersionInstance } from './blueprint_version';

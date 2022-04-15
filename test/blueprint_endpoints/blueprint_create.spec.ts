@@ -527,7 +527,7 @@ describe('[Blueprint] Create', () => {
           const { message, blueprint } = res.body;
           assert.strictEqual(message, 'blueprint has been successfully created');
 
-          const { id, name, fields, createdOn, createdBy } = blueprint;
+          const { id, name, fields, createdOn, createdBy, version } = blueprint;
           assert(id);
           addBlueprintForCleanup(id);
           assert.strictEqual(name, successPayload.name);
@@ -540,6 +540,8 @@ describe('[Blueprint] Create', () => {
           assert.strictEqual(type, successPayload.fields[0].type);
           assert.strictEqual(fieldName, successPayload.fields[0].name);
           assert(fieldId);
+
+          assert.strictEqual(version, 1);
           done();
         });
     });
