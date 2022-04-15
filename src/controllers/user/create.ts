@@ -1,36 +1,39 @@
 import { Request, Response } from 'express';
-import { User, generateKey, generateHash, UserTypes } from '../../models';
+import { User, generateKey, generateHash, UserTypes, UserInstance } from '../../models';
 
-export const create = (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   const { username, password } = req.body;
-  generateHash(password, (hashErr, hash) => {
-    if (hashErr) {
-      return res.fatalError(hashErr);
-    }
 
-    const newUser: UserTypes = {
-      username: username.toLowerCase(),
-      displayName: username,
-      hash,
-      apiKey: generateKey(),
-      isActive: true,
-      createdOn: new Date(),
-    };
+  let hash: string;
+  try {
+    hash = await generateHash(password);
+  } catch (hashError) {
+    return res.fatalError(hashError);
+  }
 
-    User.create(newUser, (createErr, user) => {
-      if (createErr) {
-        return res.fatalError(createErr);
-      }
+  const newUser: UserTypes = {
+    username: username.toLowerCase(),
+    displayName: username,
+    hash,
+    apiKey: generateKey(),
+    isActive: true,
+    createdOn: new Date(),
+  };
 
-      const userData = {
-        user: {
-          displayName: user.displayName,
-          username: user.username,
-          createdOn: user.createdOn,
-        },
-      };
+  let user: UserInstance;
+  try {
+    user = await User.create(newUser);
+  } catch (createError) {
+    return res.fatalError(createError);
+  }
 
-      res.success('user has been successfully created', userData);
-    });
-  });
+  const userData = {
+    user: {
+      displayName: user.displayName,
+      username: user.username,
+      createdOn: user.createdOn,
+    },
+  };
+
+  res.success('user has been successfully created', userData);
 };

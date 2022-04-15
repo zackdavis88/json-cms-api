@@ -229,19 +229,21 @@ describe('[User] Update', () => {
           // Validate that the new password is current.
           User.findOne(
             { username: testUser.username },
-            (err: Error, testUser: UserInstance) => {
+            async (err: Error, testUser: UserInstance) => {
               if (err) return done(err);
 
-              compareHash(
-                payload.password as string,
-                testUser.hash,
-                (err: Error, isValid) => {
-                  if (err) return done(err);
+              let passwordIsValid: boolean;
+              try {
+                passwordIsValid = await compareHash(
+                  payload.password as string,
+                  testUser.hash,
+                );
+              } catch (err) {
+                return done(err);
+              }
 
-                  assert(isValid);
-                  done();
-                },
-              );
+              assert(passwordIsValid);
+              done();
             },
           );
         });

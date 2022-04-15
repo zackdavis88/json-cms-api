@@ -1,17 +1,14 @@
 import bcrypt from 'bcryptjs';
 import { SALT_ROUNDS } from '../../../config/auth';
 
-export const generateHash = (
-  password: string,
-  callback: (err: Error, hash?: string) => void,
-) => {
-  bcrypt.genSalt(Number(SALT_ROUNDS) || 10, (saltErr, salt) => {
-    if (saltErr) return callback(saltErr);
+type GenerateHash = (password: string) => Promise<string>;
+export const generateHash: GenerateHash = (password) =>
+  new Promise((resolve) => {
+    bcrypt.hash(password, SALT_ROUNDS, (hashError, hash) => {
+      if (hashError) {
+        throw hashError;
+      }
 
-    bcrypt.hash(password, salt, (hashErr, hash) => {
-      if (hashErr) return callback(hashErr);
-
-      callback(null, hash);
+      resolve(hash);
     });
   });
-};
