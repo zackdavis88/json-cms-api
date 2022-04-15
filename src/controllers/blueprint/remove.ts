@@ -24,7 +24,7 @@ export const remove = async (req: Request, res: Response) => {
       isActive: requestedBlueprint.isActive,
       name: requestedBlueprint.name,
       createdOn: requestedBlueprint.createdOn,
-      createdBy: getUserInfo(requestedBlueprint.createdBy, 'createdBy'),
+      createdBy: getUserInfo(requestedBlueprint, 'createdBy'),
       deletedOn: requestedBlueprint.deletedOn,
       deletedBy: {
         username: user.username,
