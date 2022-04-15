@@ -1,9 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
 import { Blueprint } from '../../models';
 import { getModelInstance, PopulatedBlueprintInstance } from '../utils';
 
 export const getOne = async (req: Request, res: Response, next: NextFunction) => {
   const blueprintId = req.params.blueprintId.toLowerCase();
+
+  if (!mongoose.Types.ObjectId.isValid(blueprintId)) {
+    return res.validationError('blueprintId is not valid');
+  }
+
   const getQueryArgs = {
     _id: blueprintId,
     isActive: true,

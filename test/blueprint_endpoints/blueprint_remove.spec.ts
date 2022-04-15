@@ -52,6 +52,17 @@ describe('[Blueprint] Remove', () => {
       );
     });
 
+    it('should reject requests when the blueprintId is invalid', (done) => {
+      apiRoute = '/blueprints/a';
+      request(serverUrl).delete(apiRoute).set('x-auth-token', authToken).expect(
+        400,
+        {
+          error: 'blueprintId is not valid',
+        },
+        done,
+      );
+    });
+
     it('should reject requests when confirm is missing', (done) => {
       payload.confirm = undefined;
       request(serverUrl)

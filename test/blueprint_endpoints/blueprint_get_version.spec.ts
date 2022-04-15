@@ -57,6 +57,17 @@ describe('[BlueprintVersion] Get One', () => {
       );
     });
 
+    it('should reject requests when the blueprintId is invalid', (done) => {
+      apiRoute = '/blueprints/a';
+      request(serverUrl).get(apiRoute).set('x-auth-token', authToken).expect(
+        400,
+        {
+          error: 'blueprintId is not valid',
+        },
+        done,
+      );
+    });
+
     it('should reject requests when the requested blueprint is not found', (done) => {
       apiRoute = '/blueprints/impo$$ibleId';
       request(serverUrl).get(apiRoute).set('x-auth-token', authToken).expect(

@@ -58,6 +58,17 @@ describe('[Blueprint] Update', () => {
       );
     });
 
+    it('should reject requests when the blueprintId is invalid', (done) => {
+      apiRoute = '/blueprints/a';
+      request(serverUrl).post(apiRoute).set('x-auth-token', authToken).expect(
+        400,
+        {
+          error: 'blueprintId is not valid',
+        },
+        done,
+      );
+    });
+
     it('should reject requests when input contains no update data', (done) => {
       payload = { name: undefined, fields: undefined };
       request(serverUrl)
