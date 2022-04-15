@@ -1,4 +1,10 @@
-export const blueprintUpdatePayload = {
+import { BlueprintField } from '../index';
+
+interface BlueprintUpdatePayload {
+  name: string;
+  fields: BlueprintField[];
+}
+export const blueprintUpdatePayload: BlueprintUpdatePayload = {
   name: 'unit-test-blueprint-updated',
   fields: [
     {

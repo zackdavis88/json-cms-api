@@ -9,12 +9,14 @@ export { createTestUser } from './create_test_user';
 export { generateToken } from './generate_token';
 export { createTestBlueprint } from './create_test_blueprint';
 export { removeFieldIds } from './remove_field_ids';
+export { updateTestBlueprint } from './update_test_blueprint';
 
 export {
   UserInstance,
   BlueprintInstance,
   BlueprintField,
   BlueprintTypes,
+  BlueprintVersionInstance,
 } from '../../src/models';
 export { Connection } from 'mongoose';
 
