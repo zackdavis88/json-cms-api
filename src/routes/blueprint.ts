@@ -17,5 +17,6 @@ export const blueprintRoutes = (router: Router) => {
       BlueprintValidation.getOne,
     )
     .get(BlueprintController.getVersion, BlueprintController.getOne)
-    .post(BlueprintValidation.update, BlueprintController.update);
+    .post(BlueprintValidation.update, BlueprintController.update)
+    .delete(BlueprintValidation.remove, BlueprintController.remove);
 };
