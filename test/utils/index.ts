@@ -8,6 +8,7 @@ export { getServerUrl } from './get_server_url';
 export { createTestUser } from './create_test_user';
 export { generateToken } from './generate_token';
 export { createTestBlueprint } from './create_test_blueprint';
+export { removeFieldIds } from './remove_field_ids';
 
 export {
   UserInstance,
@@ -21,4 +22,5 @@ export {
   blueprintCreatePayload,
   BlueprintCreatePayload,
   defaultBlueprintFields,
+  blueprintUpdatePayload,
 } from './data';

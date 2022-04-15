@@ -18,8 +18,8 @@ export const update = async (req: Request, res: Response) => {
 
     try {
       await BlueprintVersion.create(newVersion);
-    } catch (err) {
-      return res.fatalError(err);
+    } catch (createError) {
+      return res.fatalError(createError);
     }
 
     requestedBlueprint.fields = sanitizedFields;

@@ -1,4 +1,4 @@
-import { User, Blueprint } from '../../src/models';
+import { User, Blueprint, BlueprintVersion } from '../../src/models';
 
 let cleanupUsernames: string[] = [];
 let cleanupBlueprints: string[] = [];
@@ -22,11 +22,15 @@ const cleanupTestUsers = (callback: () => void) => {
 const cleanupTestBlueprints = (callback: () => void) => {
   if (!cleanupBlueprints) return callback();
 
-  Blueprint.deleteMany({ _id: { $in: cleanupBlueprints } }, (err) => {
+  BlueprintVersion.deleteMany({ blueprintId: { $in: cleanupBlueprints } }, (err) => {
     if (err) return console.error(err);
 
-    cleanupBlueprints = [];
-    callback();
+    Blueprint.deleteMany({ _id: { $in: cleanupBlueprints } }, (err) => {
+      if (err) return console.error(err);
+
+      cleanupBlueprints = [];
+      callback();
+    });
   });
 };
 

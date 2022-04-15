@@ -5,21 +5,24 @@ import {
   createTestUser,
   cleanupTestRecords,
   generateToken,
-  addBlueprintForCleanup,
   Connection,
   UserInstance,
-  BlueprintCreatePayload,
+  BlueprintInstance,
+  createTestBlueprint,
+  defaultBlueprintFields,
   removeFieldIds,
 } from '../utils';
 import request from 'supertest';
-import { blueprintCreatePayload as samplePayload } from '../utils';
-const apiRoute = '/blueprints';
+import { blueprintUpdatePayload as samplePayload } from '../utils';
+import { BlueprintVersion, BlueprintVersionInstance } from '../../src/models';
+let apiRoute = '/blueprints/:blueprintId';
 const serverUrl = getServerUrl();
 
-describe('[Blueprint] Create', () => {
+describe('[Blueprint] Update', () => {
   describe(`POST ${apiRoute}`, () => {
     let connection: Connection;
     let testUser: UserInstance;
+    let testBlueprint: BlueprintInstance;
     let authToken: string;
     let payload: {
       name?: unknown;
@@ -31,6 +34,7 @@ describe('[Blueprint] Create', () => {
       if (!connection) return 'could not connect to db';
 
       testUser = await createTestUser('Password1');
+      testBlueprint = await createTestBlueprint(testUser);
       authToken = generateToken(testUser);
     });
 
@@ -40,11 +44,12 @@ describe('[Blueprint] Create', () => {
     });
 
     beforeEach(() => {
+      apiRoute = `/blueprints/${testBlueprint._id}`;
       payload = { ...samplePayload };
     });
 
     it('should reject requests when x-auth-token is missing', (done) => {
-      request(serverUrl).post(apiRoute).expect(
+      request(serverUrl).post(apiRoute).send(payload).expect(
         400,
         {
           error: 'x-auth-token header is missing from input',
@@ -53,8 +58,8 @@ describe('[Blueprint] Create', () => {
       );
     });
 
-    it('should reject requests when name is missing', (done) => {
-      payload.name = undefined;
+    it('should reject requests when input contains no update data', (done) => {
+      payload = { name: undefined, fields: undefined };
       request(serverUrl)
         .post(apiRoute)
         .set('x-auth-token', authToken)
@@ -62,7 +67,7 @@ describe('[Blueprint] Create', () => {
         .expect(
           400,
           {
-            error: 'name is missing from input',
+            error: 'request contains no update data',
           },
           done,
         );
@@ -123,21 +128,6 @@ describe('[Blueprint] Create', () => {
           400,
           {
             error: 'name contains invalid characters',
-          },
-          done,
-        );
-    });
-
-    it('should reject requests when fields is missing', (done) => {
-      payload.fields = undefined;
-      request(serverUrl)
-        .post(apiRoute)
-        .set('x-auth-token', authToken)
-        .send(payload)
-        .expect(
-          400,
-          {
-            error: 'fields is missing from input',
           },
           done,
         );
@@ -513,33 +503,102 @@ describe('[Blueprint] Create', () => {
         );
     });
 
-    it('should successfully create a new blueprint', (done) => {
-      const successPayload: BlueprintCreatePayload = {
-        ...payload,
-      } as BlueprintCreatePayload;
+    it('should successfully update a blueprints name', (done) => {
+      payload.fields = undefined;
       request(serverUrl)
         .post(apiRoute)
         .set('x-auth-token', authToken)
-        .send(successPayload)
+        .send(payload)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
 
           const { message, blueprint } = res.body;
-          assert.strictEqual(message, 'blueprint has been successfully created');
+          assert.strictEqual(message, 'blueprint has been successfully updated');
 
-          const { id, name, fields, createdOn, createdBy, version } = blueprint;
-          assert(id);
-          addBlueprintForCleanup(id);
-          assert.strictEqual(name, successPayload.name);
-          assert(createdOn);
+          const {
+            id,
+            name,
+            fields,
+            createdOn,
+            createdBy,
+            updatedOn,
+            updatedBy,
+            version,
+          } = blueprint;
+          assert.strictEqual(id, testBlueprint.id);
+          assert.strictEqual(name, payload.name);
+          assert.strictEqual(
+            new Date(createdOn).toString(),
+            new Date(testBlueprint.createdOn).toString(),
+          );
           assert(createdBy);
           assert.strictEqual(createdBy.username, testUser.username);
           assert.strictEqual(createdBy.displayName, testUser.displayName);
 
-          assert.deepStrictEqual(removeFieldIds(fields), successPayload.fields);
+          assert(updatedOn);
+          assert(updatedBy);
+          assert.strictEqual(updatedBy.username, testUser.username);
+          assert.strictEqual(updatedBy.displayName, testUser.displayName);
 
-          assert.strictEqual(version, 1);
+          assert.deepStrictEqual(fields, defaultBlueprintFields.fields); // Test will break if testBlueprint is made with a schema other than the default.
+
+          assert.strictEqual(version, testBlueprint.version); // Blueprint version will remain the same for name-only changes.
+          done();
+        });
+    });
+
+    it('should successfully update a blueprints fields', (done) => {
+      request(serverUrl)
+        .post(apiRoute)
+        .set('x-auth-token', authToken)
+        .send(payload)
+        .expect(200)
+        .end(async (err, res) => {
+          if (err) return done(err);
+
+          const { message, blueprint } = res.body;
+          assert.strictEqual(message, 'blueprint has been successfully updated');
+
+          const { id, fields, createdOn, createdBy, updatedOn, updatedBy, version } =
+            blueprint;
+          assert.strictEqual(id, testBlueprint.id);
+          assert.strictEqual(
+            new Date(createdOn).toString(),
+            new Date(testBlueprint.createdOn).toString(),
+          );
+          assert(createdBy);
+          assert.strictEqual(createdBy.username, testUser.username);
+          assert.strictEqual(createdBy.displayName, testUser.displayName);
+
+          assert(updatedOn);
+          assert(updatedBy);
+          assert.strictEqual(updatedBy.username, testUser.username);
+          assert.strictEqual(updatedBy.displayName, testUser.displayName);
+
+          const fieldsWithoutIds = removeFieldIds(fields);
+          assert.deepStrictEqual(fieldsWithoutIds, samplePayload.fields);
+
+          assert.strictEqual(version, testBlueprint.version + 1); // Blueprint version will increase when fields is updated.
+
+          // Ensure that the previous fields were stored in a blueprint version.
+          let blueprintVersion: BlueprintVersionInstance;
+          try {
+            const queryArgs = {
+              blueprintId: testBlueprint._id,
+              version: testBlueprint.version,
+            };
+            blueprintVersion = await BlueprintVersion.findOne(queryArgs).exec();
+          } catch (findError) {
+            return done(findError);
+          }
+
+          assert(blueprintVersion);
+
+          assert.deepStrictEqual(
+            blueprintVersion.toObject().fields,
+            defaultBlueprintFields.fields,
+          );
           done();
         });
     });
