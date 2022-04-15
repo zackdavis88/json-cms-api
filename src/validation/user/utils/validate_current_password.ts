@@ -17,15 +17,15 @@ export const validateCurrentPassword: ValidateCurrentPassword = (password, hash)
       return resolve('current password must be a string');
     }
 
-    compareHash(password, hash, (err: Error, isValid: boolean) => {
-      if (err) {
-        return resolve(err);
-      }
+    compareHash(password, hash)
+      .then((passwordIsValid) => {
+        if (!passwordIsValid) {
+          return resolve('current password is invalid');
+        }
 
-      if (!isValid) {
-        return resolve('current password is invalid');
-      }
-
-      resolve();
-    });
+        resolve();
+      })
+      .catch((compareError) => {
+        throw compareError;
+      });
   });

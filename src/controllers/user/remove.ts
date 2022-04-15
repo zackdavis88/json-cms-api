@@ -1,25 +1,26 @@
 import { Request, Response } from 'express';
 
-export const remove = (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   const { requestedUser } = req;
   requestedUser.isActive = false;
   requestedUser.deletedOn = new Date();
-  requestedUser.save((err, user) => {
-    if (err) {
-      return res.fatalError(err);
-    }
 
-    const userData = {
-      user: {
-        username: user.username,
-        displayName: user.displayName,
-        isActive: user.isActive,
-        createdOn: user.createdOn,
-        updatedOn: user.updatedOn,
-        deletedOn: user.deletedOn,
-      },
-    };
+  try {
+    await requestedUser.save();
+  } catch (removeError) {
+    return res.fatalError(removeError);
+  }
 
-    return res.success('user has been successfully removed', userData);
-  });
+  const userData = {
+    user: {
+      username: requestedUser.username,
+      displayName: requestedUser.displayName,
+      isActive: requestedUser.isActive,
+      createdOn: requestedUser.createdOn,
+      updatedOn: requestedUser.updatedOn,
+      deletedOn: requestedUser.deletedOn,
+    },
+  };
+
+  return res.success('user has been successfully removed', userData);
 };

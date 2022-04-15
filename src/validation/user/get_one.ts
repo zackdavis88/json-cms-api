@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { User } from '../../models';
+import { User, UserInstance } from '../../models';
 import { getModelInstance } from '../utils';
 
 export const getOne = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,6 +20,6 @@ export const getOne = async (req: Request, res: Response, next: NextFunction) =>
     return res.fatalError(error);
   }
 
-  req.requestedUser = user;
+  req.requestedUser = user as UserInstance;
   next();
 };

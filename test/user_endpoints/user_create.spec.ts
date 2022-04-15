@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import assert from 'assert';
 import mongoose from 'mongoose';
 import {
@@ -18,8 +17,8 @@ describe('[User] Create', () => {
     let connection: Connection;
     let existingUsername: string;
     let payload: {
-      username?: any;
-      password?: any;
+      username?: unknown;
+      password?: unknown;
     };
 
     beforeAll(async () => {
@@ -186,7 +185,7 @@ describe('[User] Create', () => {
           const { message, user } = res.body;
           assert.strictEqual(message, 'user has been successfully created');
           assert(user);
-          assert.strictEqual(user.username, payload.username.toLowerCase());
+          assert.strictEqual(user.username, String(payload.username).toLowerCase());
           assert.strictEqual(user.displayName, payload.username);
           assert(user.createdOn);
           addUsernameForCleanup(user.username);

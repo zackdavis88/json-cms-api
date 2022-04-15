@@ -4,24 +4,26 @@ import { addUsernameForCleanup } from './database_cleanup';
 
 export const createTestUser = (password: string) =>
   new Promise<UserInstance>((resolve) => {
-    generateHash(password, (hashErr, hash) => {
-      if (hashErr) return console.error(hashErr);
+    generateHash(password)
+      .then((hash) => {
+        const randomUsername = new mongoose.Types.ObjectId().toString();
+        const testUser = {
+          username: randomUsername.toLowerCase(),
+          displayName: randomUsername.toUpperCase(),
+          hash,
+          apiKey: generateKey(),
+          isActive: true,
+          createdOn: new Date(),
+        };
 
-      const randomUsername = new mongoose.Types.ObjectId().toString();
-      const testUser = {
-        username: randomUsername.toLowerCase(),
-        displayName: randomUsername.toUpperCase(),
-        hash,
-        apiKey: generateKey(),
-        isActive: true,
-        createdOn: new Date(),
-      };
+        User.create(testUser, (createErr, user: UserInstance) => {
+          if (createErr) return console.error(createErr);
 
-      User.create(testUser, (createErr, user: UserInstance) => {
-        if (createErr) return console.error(createErr);
-
-        addUsernameForCleanup(user.username);
-        resolve(user);
+          addUsernameForCleanup(user.username);
+          resolve(user);
+        });
+      })
+      .catch((hashErr) => {
+        console.error(hashErr);
       });
-    });
   });

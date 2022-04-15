@@ -1,13 +1,13 @@
 import bcrypt from 'bcryptjs';
 
-export const compareHash = (
-  password: string,
-  hash: string,
-  callback: (err: Error, result?: boolean) => void,
-) => {
-  bcrypt.compare(password, hash, (err, result) => {
-    if (err) return callback(err);
+type CompareHash = (password: string, hash: string) => Promise<boolean>;
+export const compareHash: CompareHash = (password, hash) =>
+  new Promise((resolve) => {
+    bcrypt.compare(password, hash, (compareError, passwordIsValid) => {
+      if (compareError) {
+        throw compareError;
+      }
 
-    callback(null, result);
+      resolve(passwordIsValid);
+    });
   });
-};

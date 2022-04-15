@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
-import { User, UserInstance } from '../../models';
-
+import { BlueprintInstance } from '../../models';
 export type ValidationError = mongoose.NativeError | string;
 
-export type ModelTypes = typeof User; // TODO: Add more models here as they are created.
+export type ModelTypes = mongoose.Model<unknown>;
 
-export type ModelInstanceTypes = UserInstance; // TODO: add more model instances here as they are created.
+export type ModelInstanceTypes = mongoose.Document<unknown>;
 
 export interface QueryArgs {
   [key: string]: unknown;
@@ -32,4 +31,29 @@ export interface PaginationData {
 export interface TokenData {
   _id: mongoose.Types.ObjectId;
   apiKey: string;
+}
+
+type FieldTypes = 'STRING' | 'NUMBER' | 'BOOLEAN' | 'DATE' | 'ARRAY' | 'OBJECT';
+export interface BlueprintField {
+  id: mongoose.Types.ObjectId;
+  type: FieldTypes;
+  name: string;
+  isRequired?: boolean;
+  isInteger?: boolean;
+  regex?: string;
+  min?: number;
+  max?: number;
+  arrayOf?: BlueprintField;
+  fields?: BlueprintField[];
+}
+
+interface UserInfo {
+  username?: string;
+  displayName?: string;
+}
+
+export interface PopulatedBlueprintInstance
+  extends Omit<BlueprintInstance, 'createdBy' | 'updatedBy'> {
+  createdBy?: UserInfo;
+  updatedBy?: UserInfo;
 }
