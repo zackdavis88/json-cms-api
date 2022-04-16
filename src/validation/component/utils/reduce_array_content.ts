@@ -17,14 +17,12 @@ type ReduceArrayContent = (
   arrayContent: any[],
   arrayOf: BlueprintField,
   fieldName: string,
-  parentFieldName: string,
 ) => ReduceArrayContentOutput;
 
 export const reduceArrayContent: ReduceArrayContent = (
   arrayContent,
   { type, fields, ...options },
   fieldName,
-  parentFieldName,
 ) => {
   return arrayContent.reduce(
     (prev, arrayField) => {
@@ -35,8 +33,8 @@ export const reduceArrayContent: ReduceArrayContent = (
       if (type === 'STRING') {
         const error = validateStringContent(
           arrayField,
-          fieldName,
-          parentFieldName,
+          'item',
+          `${fieldName} array`,
           options,
         );
 
@@ -46,7 +44,7 @@ export const reduceArrayContent: ReduceArrayContent = (
 
         return { ...prev, sanitizedArray: [...prev.sanitizedArray, arrayField] };
       } else if (type === 'BOOLEAN') {
-        const error = validateBooleanContent(arrayField, fieldName, parentFieldName);
+        const error = validateBooleanContent(arrayField, 'item', `${fieldName} array`);
 
         if (error) {
           return { error };
@@ -56,8 +54,8 @@ export const reduceArrayContent: ReduceArrayContent = (
       } else if (type === 'NUMBER') {
         const error = validateNumberContent(
           arrayField,
-          fieldName,
-          parentFieldName,
+          'item',
+          `${fieldName} array`,
           options,
         );
 
@@ -67,7 +65,7 @@ export const reduceArrayContent: ReduceArrayContent = (
 
         return { ...prev, sanitizedArray: [...prev.sanitizedArray, arrayField] };
       } else if (type === 'DATE') {
-        const error = validateDateContent(arrayField, fieldName, parentFieldName);
+        const error = validateDateContent(arrayField, 'item', `${fieldName} array`);
 
         if (error) {
           return { error };

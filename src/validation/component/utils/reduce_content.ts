@@ -152,7 +152,6 @@ export const reduceContent: ReduceContent = (
           contentValue,
           arrayOf,
           fieldName,
-          parentFieldName || 'content',
         );
 
         if (error) {
