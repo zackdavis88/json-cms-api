@@ -1,0 +1,94 @@
+/*
+  Using this file to stage JSON that I can paste into POSTMAN.
+  This component follows the Blueprint found in postman_blueprint_create.json
+
+  Content Structure:
+  {
+    rootLevelString: <string>,
+    rootLevelBoolean: <boolean>,
+    rootLevelDate: <date>,
+    rootLevelNumber: <number>,
+    styles: {
+      lg: {property: <string>, value: <string>}[],
+      md: {property: <string>, value: <string>}[],
+      sm: {property: <string>, value: <string>}[],
+      stylesLevelString: <string isRequired regex = ^stylesLevelString>, 
+      stylesLevelBoolean: <boolean>,
+      stylesLevelDate: <date>,
+      stylesLevelNumber: <number isInteger>
+    },
+    arrayOfString: <string>[],
+    arrayOfBooleans: <boolean>[],
+    arrayOfDates: <date>[],
+    arrayOfNumbers: <number>[],
+    rootLevelObject: {
+      nestedLevel1: {
+        nestedLevel2 <isRequired>: {
+          nestedLevel3: {
+            booleanFromTheDepths: <boolean isRequired>,
+            stringFromTheDepths: <string isRequired>,
+            dateFromTheDepths: <date isRequired>,
+            arrayFromTheDepths: <number min=2 max=100>[]
+          }
+        }
+      }
+    }
+  }
+*/
+{
+  "name": "TestComponent",
+  "blueprint": "625af019bc3244a184477481",
+  "content": {
+    "rootLevelString": "a test value",
+    "rootLevelBoolean": false,
+    "rootLevelDate": "2022-04-16T16:25:46.945Z",
+    "styles": {
+      "lg": [
+        {
+          "property": "display",
+          "value": "block"
+        },
+        {
+          "property": "textAlign",
+          "value": "center"
+        }
+      ],
+      "md": [
+        {
+          "property": "color",
+          "value": "red"
+        }
+      ],
+      "sm": [
+        {
+          "property": "display",
+          "value": "none"
+        }
+      ],
+      "stylesLevelString": "stylesLevelString and some more text",
+      "stylesLevelBoolean": true,
+      "stylesLevelNumber": 1235,
+      "stylesLevelDate": "2022-04-16T16:27:24.000Z"
+    },
+    "arrayOfStrings": ["option 1", "options 2", "option 3", "option 4"],
+    "arrayOfBooleans": [false, false, false, false, false, true],
+    "arrayOfDates": [
+      "2022-04-16T16:29:13.818Z",
+      "2022-04-16T16:31:47.040Z",
+      "2022-04-16T16:31:49.276Z"
+    ],
+    "arrayOfNumbers": [1, 2, 3, 5],
+    "rootLevelObject": {
+      "nestedLevel1": {
+        "nestedLevel2": {
+          "nestedLevel3": {
+            "booleanFromTheDepths": true,
+            "stringFromTheDepths": "deep string",
+            "dateFromTheDepths": "2022-04-16T16:29:13.818Z",
+            "arrayFromTheDepths": [4, 6, 7, 8]
+          }
+        }
+      }
+    }
+  }
+}
