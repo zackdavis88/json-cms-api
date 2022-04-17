@@ -11,6 +11,7 @@ import {
   BlueprintInstance,
 } from '../utils';
 import request from 'supertest';
+import { BlueprintVersion, BlueprintVersionInstance } from '../../src/models';
 let apiRoute = '/blueprints/:blueprintId';
 const serverUrl = getServerUrl();
 
@@ -114,7 +115,7 @@ describe('[Blueprint] Remove', () => {
         .set('x-auth-token', authToken)
         .send(payload)
         .expect(200)
-        .end((err, res) => {
+        .end(async (err, res) => {
           if (err) return done(err);
 
           const { message, blueprint } = res.body;
@@ -136,6 +137,21 @@ describe('[Blueprint] Remove', () => {
           assert(blueprint.deletedBy);
           assert.strictEqual(blueprint.deletedBy.username, testUser.username);
           assert.strictEqual(blueprint.deletedBy.displayName, testUser.displayName);
+
+          let blueprintVersion: BlueprintVersionInstance;
+          try {
+            blueprintVersion = await BlueprintVersion.findOne({
+              blueprintId: testBlueprint._id,
+              version: testBlueprint.version,
+            }).exec();
+          } catch (err) {
+            return done(err);
+          }
+
+          assert.deepStrictEqual(
+            blueprintVersion.toObject().fields,
+            testBlueprint.toObject().fields,
+          );
           done();
         });
     });
