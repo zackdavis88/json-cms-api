@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 export interface ComponentTypes {
   blueprint: mongoose.Types.ObjectId;
+  blueprintVersion: number;
   name: string;
   isActive: boolean;
   createdOn: Date;
@@ -17,6 +18,7 @@ export interface ComponentTypes {
 const ComponentSchema = new mongoose.Schema<ComponentTypes>(
   {
     blueprint: { type: mongoose.Schema.Types.ObjectId, ref: 'Blueprint' },
+    blueprintVersion: Number,
     name: String,
     isActive: Boolean,
     createdOn: Date,

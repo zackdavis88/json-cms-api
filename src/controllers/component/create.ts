@@ -9,6 +9,7 @@ export const create = async (req: Request, res: Response) => {
     name,
     isActive: true,
     blueprint: componentBlueprint._id,
+    blueprintVersion: componentBlueprint.version,
     content: sanitizedContent,
     createdOn: new Date(),
     createdBy: user._id,
@@ -25,6 +26,7 @@ export const create = async (req: Request, res: Response) => {
     component: {
       id: component._id,
       blueprint: componentBlueprint._id,
+      blueprintVersion: component.blueprintVersion,
       name: component.name,
       content: component.content,
       createdOn: component.createdOn,
