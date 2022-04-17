@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ComponentInstance } from '../../models';
+import { ComponentInstance, ComponentVersion } from '../../models';
 import { getUserInfo } from '../utils';
 
 export const update = async (req: Request, res: Response) => {
@@ -11,8 +11,24 @@ export const update = async (req: Request, res: Response) => {
   }
 
   if (sanitizedContent) {
+    const newVersion = {
+      name: requestedComponent.name,
+      componentId: requestedComponent._id,
+      version: requestedComponent.version,
+      content: requestedComponent.content,
+      createdOn: new Date(),
+      createdBy: user._id,
+    };
+
+    try {
+      await ComponentVersion.create(newVersion);
+    } catch (createError) {
+      return res.fatalError(createError);
+    }
+
     requestedComponent.content = sanitizedContent;
     requestedComponent.markModified('content'); // required when updating mongoose Mixed schema items.
+    requestedComponent.version = requestedComponent.version + 1;
   }
 
   requestedComponent.updatedOn = new Date();
@@ -29,6 +45,7 @@ export const update = async (req: Request, res: Response) => {
     component: {
       id: component._id,
       name: component.name,
+      version: component.version,
       blueprint: {
         id: requestedComponent.blueprint._id,
         name: requestedComponent.blueprint.name,

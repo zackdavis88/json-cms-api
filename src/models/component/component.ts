@@ -13,6 +13,7 @@ export interface ComponentTypes {
   deletedBy: mongoose.Types.ObjectId;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any;
+  version: number;
 }
 
 const ComponentSchema = new mongoose.Schema<ComponentTypes>(
@@ -28,6 +29,7 @@ const ComponentSchema = new mongoose.Schema<ComponentTypes>(
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     deletedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     content: { type: mongoose.Schema.Types.Mixed, default: {} },
+    version: Number,
   },
   { minimize: false },
 );

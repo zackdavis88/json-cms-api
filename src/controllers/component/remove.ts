@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { getUserInfo } from '../utils';
+import { ComponentVersion } from '../../models';
 
 export const remove = async (req: Request, res: Response) => {
   const { requestedComponent, user } = req;
@@ -9,6 +10,16 @@ export const remove = async (req: Request, res: Response) => {
   requestedComponent.deletedBy = user._id;
 
   try {
+    const newVersion = {
+      name: requestedComponent.name,
+      componentId: requestedComponent._id,
+      version: requestedComponent.version,
+      content: requestedComponent.content,
+      createdOn: new Date(),
+      createdBy: user._id,
+    };
+    await ComponentVersion.create(newVersion);
+    requestedComponent.version = requestedComponent.version + 1;
     await requestedComponent.save();
   } catch (removeError) {
     return res.fatalError(removeError);

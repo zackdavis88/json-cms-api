@@ -13,6 +13,7 @@ export const create = async (req: Request, res: Response) => {
     content: sanitizedContent,
     createdOn: new Date(),
     createdBy: user._id,
+    version: 1,
   };
 
   let component: ComponentInstance;
@@ -31,6 +32,7 @@ export const create = async (req: Request, res: Response) => {
         name: componentBlueprint.name,
       },
       name: component.name,
+      version: component.version,
       content: component.content,
       createdOn: component.createdOn,
       createdBy: {
