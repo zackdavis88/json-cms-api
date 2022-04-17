@@ -16,4 +16,5 @@ export {
   TokenData,
   BlueprintField,
   PopulatedBlueprintInstance,
+  PopulatedComponentInstance,
 } from './types';

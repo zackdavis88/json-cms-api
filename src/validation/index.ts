@@ -14,4 +14,5 @@ export {
   PaginationData,
   TokenData,
   PopulatedBlueprintInstance,
+  PopulatedComponentInstance,
 } from './utils';

@@ -25,8 +25,11 @@ export const create = async (req: Request, res: Response) => {
   const componentData = {
     component: {
       id: component._id,
-      blueprint: componentBlueprint._id,
-      blueprintVersion: component.blueprintVersion,
+      blueprint: {
+        id: componentBlueprint._id,
+        version: componentBlueprint.version,
+        name: componentBlueprint.name,
+      },
       name: component.name,
       content: component.content,
       createdOn: component.createdOn,
