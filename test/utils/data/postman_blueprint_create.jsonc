@@ -1,0 +1,186 @@
+/*
+  Using this file to stage JSON that I can paste into POSTMAN.
+  Wanted to build a Blueprint that pushes validation edge cases.
+*/
+{
+  "name": "TestBlueprint",
+  "fields": [
+    {
+      "name": "rootLevelString",
+      "type": "STRING"
+    },
+    {
+      "name": "rootLevelBoolean",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "rootLevelDate",
+      "type": "DATE"
+    },
+    {
+      "name": "rootLevelNumber",
+      "type": "NUMBER"
+    },
+    {
+      "name": "styles",
+      "type": "OBJECT",
+      "fields": [
+        {
+          "name": "lg",
+          "type": "ARRAY",
+          "arrayOf": {
+            "name": "styleObject",
+            "type": "OBJECT",
+            "fields": [
+              {
+                "name": "property",
+                "type": "STRING"
+              },
+              {
+                "name": "value",
+                "type": "STRING"
+              }
+            ]
+          }
+        },
+        {
+          "name": "md",
+          "type": "ARRAY",
+          "arrayOf": {
+            "name": "styleObject",
+            "type": "OBJECT",
+            "fields": [
+              {
+                "name": "property",
+                "type": "STRING"
+              },
+              {
+                "name": "value",
+                "type": "STRING"
+              }
+            ]
+          }
+        },
+        {
+          "name": "sm",
+          "type": "ARRAY",
+          "arrayOf": {
+            "name": "styleObject",
+            "type": "OBJECT",
+            "fields": [
+              {
+                "name": "property",
+                "type": "STRING"
+              },
+              {
+                "name": "value",
+                "type": "STRING"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stylesLevelString",
+          "type": "STRING",
+          "isRequired": true,
+          "regex": "^stylesLevelString"
+        },
+        {
+          "name": "stylesLevelBoolean",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "stylesLevelDate",
+          "type": "DATE"
+        },
+        {
+          "name": "stylesLevelNumber",
+          "type": "NUMBER",
+          "isInteger": true
+        }
+      ]
+    },
+    {
+      "name": "arrayOfStrings",
+      "type": "ARRAY",
+      "arrayOf": {
+        "name": "arrayOfStringsString",
+        "type": "STRING"
+      }
+    },
+    {
+      "name": "arrayOfBooleans",
+      "type": "ARRAY",
+      "arrayOf": {
+        "name": "arrayOfBooleansBoolean",
+        "type": "BOOLEAN"
+      }
+    },
+    {
+      "name": "arrayOfDates",
+      "type": "ARRAY",
+      "arrayOf": {
+        "name": "arrayOfDatesDate",
+        "type": "DATE"
+      }
+    },
+    {
+      "name": "arrayOfNumbers",
+      "type": "ARRAY",
+      "arrayOf": {
+        "name": "arrayOfNumbersNumber",
+        "type": "NUMBER"
+      }
+    },
+    {
+      "name": "rootLevelObject",
+      "type": "OBJECT",
+      "fields": [
+        {
+          "name": "nestedLevel1",
+          "type": "OBJECT",
+          "fields": [
+            {
+              "name": "nestedLevel2",
+              "type": "OBJECT",
+              "isRequired": true,
+              "fields": [
+                {
+                  "name": "nestedLevel3",
+                  "type": "OBJECT",
+                  "fields": [
+                    {
+                      "name": "booleanFromTheDepths",
+                      "type": "BOOLEAN",
+                      "isRequired": true
+                    },
+                    {
+                      "name": "stringFromTheDepths",
+                      "type": "STRING",
+                      "isRequired": true
+                    },
+                    {
+                      "name": "dateFromTheDepths",
+                      "type": "DATE",
+                      "isRequired": true
+                    },
+                    {
+                      "name": "arrayFromTheDepths",
+                      "type": "ARRAY",
+                      "arrayOf": {
+                        "name": "arrayNumber",
+                        "type": "NUMBER",
+                        "min": 2,
+                        "max": 100
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

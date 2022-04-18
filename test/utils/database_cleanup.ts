@@ -1,7 +1,14 @@
-import { User, Blueprint, BlueprintVersion } from '../../src/models';
+import {
+  User,
+  Blueprint,
+  BlueprintVersion,
+  Component,
+  ComponentVersion,
+} from '../../src/models';
 
 let cleanupUsernames: string[] = [];
 let cleanupBlueprints: string[] = [];
+let cleanupComponents: string[] = [];
 
 const cleanupTestUsers = (callback: () => void) => {
   if (!cleanupUsernames.length) return callback();
@@ -20,7 +27,7 @@ const cleanupTestUsers = (callback: () => void) => {
 };
 
 const cleanupTestBlueprints = (callback: () => void) => {
-  if (!cleanupBlueprints) return callback();
+  if (!cleanupBlueprints.length) return callback();
 
   BlueprintVersion.deleteMany({ blueprintId: { $in: cleanupBlueprints } }, (err) => {
     if (err) return console.error(err);
@@ -34,11 +41,28 @@ const cleanupTestBlueprints = (callback: () => void) => {
   });
 };
 
+const cleanupTestComponents = (callback: () => void) => {
+  if (!cleanupComponents.length) return callback();
+
+  ComponentVersion.deleteMany({ componentId: { $in: cleanupComponents } }, (err) => {
+    if (err) return console.error(err);
+
+    Component.deleteMany({ _id: { $in: cleanupComponents } }, (err) => {
+      if (err) return console.error(err);
+
+      cleanupComponents = [];
+      callback();
+    });
+  });
+};
+
 export const cleanupTestRecords = () =>
   new Promise<void>((resolve) => {
     cleanupTestUsers(() => {
-      cleanupTestBlueprints(() => {
-        resolve();
+      cleanupTestComponents(() => {
+        cleanupTestBlueprints(() => {
+          resolve();
+        });
       });
     });
   });
@@ -50,5 +74,10 @@ export const addUsernameForCleanup = (username: string) => {
 
 export const addBlueprintForCleanup = (blueprintId: string) => {
   cleanupBlueprints.push(blueprintId);
+  return;
+};
+
+export const addComponentForCleanup = (componentId: string) => {
+  cleanupComponents.push(componentId);
   return;
 };

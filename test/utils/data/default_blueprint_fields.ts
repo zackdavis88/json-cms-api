@@ -9,21 +9,27 @@ export const defaultBlueprintFields: DefaultBlueprintFields = {
     {
       type: 'STRING',
       name: 'stringField',
+      isRequired: true,
+      regex: '^test',
     },
     {
       type: 'ARRAY',
       name: 'arrayField',
+      min: 1,
+      max: 5,
       arrayOf: {
         type: 'OBJECT',
         name: 'arrayField_objectField',
         fields: [
           {
             type: 'STRING',
-            name: 'arrayField_objectField_stringField',
+            name: 'arrayNestedStringField',
+            min: 1,
+            max: 50,
           },
           {
             type: 'NUMBER',
-            name: 'arrayField_objectField_numberField',
+            name: 'arrayNestedNumberField',
           },
         ],
       },
@@ -34,11 +40,12 @@ export const defaultBlueprintFields: DefaultBlueprintFields = {
       fields: [
         {
           type: 'BOOLEAN',
-          name: 'objectField_booleanField',
+          name: 'nestedBooleanField',
         },
         {
           type: 'DATE',
-          name: 'objectField_dateField',
+          name: 'nestedDateField',
+          isRequired: true,
         },
       ],
     },
@@ -53,6 +60,41 @@ export const defaultBlueprintFields: DefaultBlueprintFields = {
     {
       type: 'NUMBER',
       name: 'numberField',
+      isInteger: true,
+      min: 23,
+      max: 55,
+    },
+    {
+      type: 'ARRAY',
+      name: 'arrayOfStrings',
+      arrayOf: {
+        type: 'STRING',
+        name: 'stringItem',
+      },
+    },
+    {
+      type: 'ARRAY',
+      name: 'arrayOfBooleans',
+      arrayOf: {
+        type: 'BOOLEAN',
+        name: 'booleanItem',
+      },
+    },
+    {
+      type: 'ARRAY',
+      name: 'arrayOfNumbers',
+      arrayOf: {
+        type: 'NUMBER',
+        name: 'numberItem',
+      },
+    },
+    {
+      type: 'ARRAY',
+      name: 'arrayOfDates',
+      arrayOf: {
+        type: 'DATE',
+        name: 'dateItem',
+      },
     },
   ],
 };

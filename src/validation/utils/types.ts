@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { BlueprintInstance } from '../../models';
+import { BlueprintInstance, ComponentInstance, UserInstance } from '../../models';
 export type ValidationError = mongoose.NativeError | string;
 
 export type ModelTypes = mongoose.Model<unknown>;
@@ -35,7 +35,7 @@ export interface TokenData {
 
 type FieldTypes = 'STRING' | 'NUMBER' | 'BOOLEAN' | 'DATE' | 'ARRAY' | 'OBJECT';
 export interface BlueprintField {
-  id: mongoose.Types.ObjectId;
+  id?: mongoose.Types.ObjectId;
   type: FieldTypes;
   name: string;
   isRequired?: boolean;
@@ -56,4 +56,11 @@ export interface PopulatedBlueprintInstance
   extends Omit<BlueprintInstance, 'createdBy' | 'updatedBy'> {
   createdBy?: UserInfo;
   updatedBy?: UserInfo;
+}
+
+export interface PopulatedComponentInstance
+  extends Omit<ComponentInstance, 'createdBy' | 'updatedBy' | 'blueprint'> {
+  createdBy?: UserInstance;
+  updatedBy?: UserInstance;
+  blueprint: BlueprintInstance;
 }

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { BlueprintVersion } from '../../models';
 import { getUserInfo } from '../utils';
 
 export const remove = async (req: Request, res: Response) => {
@@ -9,6 +10,16 @@ export const remove = async (req: Request, res: Response) => {
   requestedBlueprint.deletedBy = user._id;
 
   try {
+    const newVersion = {
+      name: requestedBlueprint.name,
+      blueprintId: requestedBlueprint._id,
+      version: requestedBlueprint.version,
+      fields: requestedBlueprint.fields,
+      createdOn: new Date(),
+      createdBy: user._id,
+    };
+    await BlueprintVersion.create(newVersion);
+    requestedBlueprint.version = requestedBlueprint.version + 1;
     await requestedBlueprint.save();
   } catch (removeError) {
     return res.fatalError(removeError);

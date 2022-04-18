@@ -1,4 +1,10 @@
-import { isMissing, compareType } from '../../utils';
+import { isMissing, compareType } from './index';
+
+/*
+  'name' is a common property that will be used for most resources.
+  This method will validate all name inputs because I think its OK to keep
+  the requirements uniform across resources for now...I will update if needed.
+*/
 
 type ValidateUsername = (
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -23,7 +29,7 @@ export const validateName: ValidateUsername = (name, isRequired = true) =>
     }
 
     // eslint-disable-next-line quotes
-    const regex = new RegExp("^[A-Za-z0-9-_+=&^%$#*@!|(){}?.,<>;': ]+$");
+    const regex = new RegExp("^[A-Za-z0-9-_+=&^%$#*@!|(){}?.,<>;':/ ]+$");
     if (!regex.test(name)) {
       return resolve('name contains invalid characters');
     }
