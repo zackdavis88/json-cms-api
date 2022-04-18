@@ -3,7 +3,7 @@ import { Blueprint, BlueprintInstance } from '../../../models';
 
 type ValidateBlueprint = (blueprintId: string) => Promise<BlueprintInstance>;
 export const validateBlueprint: ValidateBlueprint = (blueprintId) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     if (!mongoose.Types.ObjectId.isValid(blueprintId)) {
       throw 'blueprintId is not valid';
     }
@@ -18,6 +18,6 @@ export const validateBlueprint: ValidateBlueprint = (blueprintId) =>
         resolve(blueprint);
       })
       .catch((findOneError) => {
-        throw findOneError;
+        reject(findOneError);
       });
   });

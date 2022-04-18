@@ -21,7 +21,7 @@ type ReduceArrayContent = (
 
 export const reduceArrayContent: ReduceArrayContent = (
   arrayContent,
-  { type, fields, ...options },
+  arrayOf,
   fieldName,
 ) => {
   return arrayContent.reduce(
@@ -30,13 +30,13 @@ export const reduceArrayContent: ReduceArrayContent = (
         return prev;
       }
 
+      const { type, fields, regex, min, max, isInteger } = arrayOf;
       if (type === 'STRING') {
-        const error = validateStringContent(
-          arrayField,
-          'item',
-          `${fieldName} array`,
-          options,
-        );
+        const error = validateStringContent(arrayField, 'item', `${fieldName} array`, {
+          regex,
+          min,
+          max,
+        });
 
         if (error) {
           return { error };
@@ -52,12 +52,11 @@ export const reduceArrayContent: ReduceArrayContent = (
 
         return { ...prev, sanitizedArray: [...prev.sanitizedArray, arrayField] };
       } else if (type === 'NUMBER') {
-        const error = validateNumberContent(
-          arrayField,
-          'item',
-          `${fieldName} array`,
-          options,
-        );
+        const error = validateNumberContent(arrayField, 'item', `${fieldName} array`, {
+          isInteger,
+          min,
+          max,
+        });
 
         if (error) {
           return { error };

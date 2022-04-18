@@ -29,7 +29,7 @@ export const validateName: ValidateUsername = (name, isRequired = true) =>
     }
 
     // eslint-disable-next-line quotes
-    const regex = new RegExp("^[A-Za-z0-9-_+=&^%$#*@!|(){}?.,<>;': ]+$");
+    const regex = new RegExp("^[A-Za-z0-9-_+=&^%$#*@!|(){}?.,<>;':/ ]+$");
     if (!regex.test(name)) {
       return resolve('name contains invalid characters');
     }

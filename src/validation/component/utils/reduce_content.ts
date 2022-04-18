@@ -24,22 +24,32 @@ export const reduceContent: ReduceContent = (
   parentFieldName = '',
 ) => {
   return blueprintFields.reduce(
-    (prev, { name, type, fields: childrenFields, arrayOf, ...options }) => {
+    (prev, field) => {
       if (prev.error) {
         return prev;
       }
-
+      const {
+        name,
+        type,
+        fields: childrenFields,
+        arrayOf,
+        isRequired,
+        regex,
+        isInteger,
+        min,
+        max,
+      } = field;
       const fieldName = name;
       const fieldType = type;
       const contentValue = content[fieldName];
 
-      if (options.isRequired && isMissing(contentValue)) {
+      if (isRequired && isMissing(contentValue)) {
         return {
           error: `${
             parentFieldName || 'content'
           } field ${fieldName} is a required ${fieldType.toLowerCase()}`,
         };
-      } else if (!options.isRequired && isMissing(contentValue)) {
+      } else if (!isRequired && isMissing(contentValue)) {
         return prev;
       }
 
@@ -48,7 +58,7 @@ export const reduceContent: ReduceContent = (
           contentValue,
           fieldName,
           parentFieldName || 'content',
-          options,
+          { regex, min, max },
         );
         if (error) {
           return { error };
@@ -76,7 +86,7 @@ export const reduceContent: ReduceContent = (
           contentValue,
           fieldName,
           parentFieldName || 'content',
-          options,
+          { isInteger, min, max },
         );
         if (error) {
           return { error };
@@ -132,19 +142,19 @@ export const reduceContent: ReduceContent = (
           };
         }
 
-        if (typeof options.min === 'number' && contentValue.length < options.min) {
+        if (typeof min === 'number' && contentValue.length < min) {
           return {
             error: `${
               parentFieldName || 'content'
-            } field ${fieldName} must have a minimum length of ${options.min}`,
+            } field ${fieldName} must have a minimum length of ${min}`,
           };
         }
 
-        if (typeof options.max === 'number' && contentValue.length > options.max) {
+        if (typeof max === 'number' && contentValue.length > max) {
           return {
             error: `${
               parentFieldName || 'content'
-            } field ${fieldName} must have a maximum length of ${options.max}`,
+            } field ${fieldName} must have a maximum length of ${max}`,
           };
         }
 
