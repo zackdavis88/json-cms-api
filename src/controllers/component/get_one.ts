@@ -17,8 +17,9 @@ export const getOne = (req: Request, res: Response) => {
       content: requestedComponent.content,
       createdOn: requestedComponent.createdOn,
       updatedOn: requestedComponent.updatedOn,
-      createdBy: getUserInfo(requestedComponent, 'createdOn'),
+      createdBy: getUserInfo(requestedComponent, 'createdBy'),
       updatedBy: getUserInfo(requestedComponent, 'updatedBy'),
+      version: requestedComponent.version,
     },
   };
 

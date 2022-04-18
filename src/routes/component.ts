@@ -16,7 +16,11 @@ export const componentRoutes = (router: Router) => {
       AuthController.authenticateToken,
       ComponentValidation.getOne,
     )
-    .get(ComponentValidation.getBlueprintVersion, ComponentController.getOne)
+    .get(
+      ComponentValidation.getBlueprintVersion,
+      ComponentController.getVersion,
+      ComponentController.getOne,
+    )
     .post(
       ComponentValidation.getBlueprintVersion,
       ComponentValidation.update,

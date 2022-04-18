@@ -6,13 +6,14 @@ import {
   UserInstance,
 } from '../../src/models';
 import { addComponentForCleanup } from './database_cleanup';
-import { defaultBlueprintFields } from '../utils';
+import { defaultComponentContent } from '../utils';
 
 interface ComponentCreateOverrides {
   name?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content?: any;
   version?: number;
+  blueprintVersion?: number;
 }
 
 export const createTestComponent = (
@@ -22,15 +23,16 @@ export const createTestComponent = (
 ) =>
   new Promise<ComponentInstance>((resolve) => {
     const name = overrides.name || new mongoose.Types.ObjectId().toString();
-    const content = overrides.content || [...defaultBlueprintFields.fields];
+    const content = overrides.content || { ...defaultComponentContent };
     const version = overrides.version || 1;
+    const blueprintVersion = overrides.blueprintVersion || blueprint.version;
 
     const testComponent = {
       name,
       content,
       isActive: true,
       blueprint: blueprint._id,
-      blueprintVersion: blueprint.version,
+      blueprintVersion: blueprintVersion,
       createdOn: new Date(),
       createdBy: user._id,
       version,

@@ -9,21 +9,25 @@ import {
   Connection,
   UserInstance,
   BlueprintInstance,
+  ComponentInstance,
+  createTestComponent,
 } from '../utils';
 import request from 'supertest';
-import { BlueprintVersion, BlueprintVersionInstance } from '../../src/models';
-let apiRoute = '/blueprints/:blueprintId';
+import { ComponentVersion, ComponentVersionInstance } from '../../src/models';
+let apiRoute = '/components/:componentId';
 const serverUrl = getServerUrl();
 
-describe('[Blueprint] Remove', () => {
+describe('[Component] Remove', () => {
   describe(`DELETE ${apiRoute}`, () => {
     let connection: Connection;
     let testUser: UserInstance;
     let testBlueprint: BlueprintInstance;
     let authToken: string;
+    let testComponent: ComponentInstance;
     let payload: {
       confirm?: unknown;
     };
+
     beforeAll(async () => {
       connection = await connectDatabase();
       if (!connection) return 'could not connect to db';
@@ -31,6 +35,7 @@ describe('[Blueprint] Remove', () => {
       testUser = await createTestUser('Password1');
       testBlueprint = await createTestBlueprint(testUser);
       authToken = generateToken(testUser);
+      testComponent = await createTestComponent(testUser, testBlueprint);
     });
 
     afterAll(async () => {
@@ -39,8 +44,8 @@ describe('[Blueprint] Remove', () => {
     });
 
     beforeEach(() => {
-      apiRoute = `/blueprints/${testBlueprint._id}`;
-      payload = { confirm: testBlueprint.name };
+      apiRoute = `/components/${testComponent._id}`;
+      payload = { confirm: testComponent.name };
     });
 
     it('should reject requests when x-auth-token is missing', (done) => {
@@ -53,12 +58,12 @@ describe('[Blueprint] Remove', () => {
       );
     });
 
-    it('should reject requests when the blueprintId is invalid', (done) => {
-      apiRoute = '/blueprints/a';
+    it('should reject requests when the componentId is invalid', (done) => {
+      apiRoute = '/components/a';
       request(serverUrl).delete(apiRoute).set('x-auth-token', authToken).expect(
         400,
         {
-          error: 'blueprintId is not valid',
+          error: 'componentId is not valid',
         },
         done,
       );
@@ -95,7 +100,7 @@ describe('[Blueprint] Remove', () => {
     });
 
     it('should reject requests when confirm is invalid', (done) => {
-      payload.confirm = 'NotTheRightBlueprintName';
+      payload.confirm = 'NotTheRightComponentName';
       request(serverUrl)
         .delete(apiRoute)
         .set('x-auth-token', authToken)
@@ -103,13 +108,13 @@ describe('[Blueprint] Remove', () => {
         .expect(
           400,
           {
-            error: 'confirm input must match the blueprint name',
+            error: 'confirm input must match the component name',
           },
           done,
         );
     });
 
-    it('should successfully remove a blueprint', (done) => {
+    it('should successfully remove a component', (done) => {
       request(serverUrl)
         .delete(apiRoute)
         .set('x-auth-token', authToken)
@@ -118,39 +123,39 @@ describe('[Blueprint] Remove', () => {
         .end(async (err, res) => {
           if (err) return done(err);
 
-          const { message, blueprint } = res.body;
+          const { message, component } = res.body;
 
-          assert.strictEqual(message, 'blueprint has been successfully removed');
-          assert(blueprint);
-          assert.strictEqual(blueprint.id, testBlueprint.id);
-          assert.strictEqual(blueprint.isActive, false);
-          assert.strictEqual(blueprint.name, testBlueprint.name);
+          assert.strictEqual(message, 'component has been successfully removed');
+          assert(component);
+          assert.strictEqual(component.id, testComponent.id);
+          assert.strictEqual(component.isActive, false);
+          assert.strictEqual(component.name, testComponent.name);
           assert.strictEqual(
-            new Date(blueprint.createdOn).toString(),
-            new Date(testBlueprint.createdOn).toString(),
+            new Date(component.createdOn).toString(),
+            new Date(testComponent.createdOn).toString(),
           );
-          assert(blueprint.createdBy);
-          assert.strictEqual(blueprint.createdBy.username, testUser.username);
-          assert.strictEqual(blueprint.createdBy.displayName, testUser.displayName);
+          assert(component.createdBy);
+          assert.strictEqual(component.createdBy.username, testUser.username);
+          assert.strictEqual(component.createdBy.displayName, testUser.displayName);
 
-          assert(blueprint.deletedOn);
-          assert(blueprint.deletedBy);
-          assert.strictEqual(blueprint.deletedBy.username, testUser.username);
-          assert.strictEqual(blueprint.deletedBy.displayName, testUser.displayName);
+          assert(component.deletedOn);
+          assert(component.deletedBy);
+          assert.strictEqual(component.deletedBy.username, testUser.username);
+          assert.strictEqual(component.deletedBy.displayName, testUser.displayName);
 
-          let blueprintVersion: BlueprintVersionInstance;
+          let componentVersion: ComponentVersionInstance;
           try {
-            blueprintVersion = await BlueprintVersion.findOne({
-              blueprintId: testBlueprint._id,
-              version: testBlueprint.version,
+            componentVersion = await ComponentVersion.findOne({
+              componentId: testComponent._id,
+              version: testComponent.version,
             }).exec();
           } catch (err) {
             return done(err);
           }
 
           assert.deepStrictEqual(
-            blueprintVersion.toObject().fields,
-            testBlueprint.toObject().fields,
+            componentVersion.toObject().content,
+            testComponent.toObject().content,
           );
           done();
         });

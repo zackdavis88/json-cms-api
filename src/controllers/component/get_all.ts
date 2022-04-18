@@ -36,8 +36,13 @@ export const getAll = async (req: Request, res: Response) => {
     components: components.map((component) => ({
       id: component._id,
       name: component.name,
+      version: component.version,
       blueprint: {
         id: component.blueprint._id,
+        /* TODO: This name value could potentially be inaccurate. Since changing names does not create a new version history there may
+                 be cases where the name is the blueprint's current name when it should be something different that matches version history.
+                 Its not my favorite experience but its also not the worst, im going to leave it as-is for now and may revisit fixing this later.
+        */
         name: component.blueprint.name,
         version: component.blueprintVersion,
       },
