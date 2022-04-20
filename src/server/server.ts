@@ -14,8 +14,14 @@ import {
   PaginationData,
   PopulatedBlueprintInstance,
   PopulatedComponentInstance,
+  PopulatedLayoutInstance,
 } from '../validation';
-import { UserInstance, BlueprintField, BlueprintInstance } from '../models';
+import {
+  UserInstance,
+  BlueprintField,
+  BlueprintInstance,
+  ComponentInstance,
+} from '../models';
 
 // Extend the types availble on the Express request/response objects.
 declare global {
@@ -30,8 +36,10 @@ declare global {
       sanitizedFields: BlueprintField[];
       requestedBlueprint: PopulatedBlueprintInstance;
       requestedComponent: PopulatedComponentInstance;
+      requestedLayout: PopulatedLayoutInstance;
       componentBlueprint: BlueprintInstance;
       sanitizedContent: unknown;
+      layoutComponents: ComponentInstance[];
     }
     interface Response {
       fatalError: (message: string | NativeError | Error) => Response;
