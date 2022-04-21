@@ -3,6 +3,7 @@ export { default as AuthValidation } from './authentication';
 export { default as BlueprintValidation } from './blueprint';
 export { default as ComponentValidation } from './component';
 export { default as LayoutValidation } from './layout';
+export { default as FragmentValidation } from './fragment';
 
 export {
   escapeRegex,
@@ -17,4 +18,5 @@ export {
   PopulatedBlueprintInstance,
   PopulatedComponentInstance,
   PopulatedLayoutInstance,
+  PopulatedFragmentInstance,
 } from './utils';

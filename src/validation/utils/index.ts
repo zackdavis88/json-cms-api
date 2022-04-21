@@ -18,4 +18,5 @@ export {
   PopulatedBlueprintInstance,
   PopulatedComponentInstance,
   PopulatedLayoutInstance,
+  PopulatedFragmentInstance,
 } from './types';

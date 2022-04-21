@@ -15,6 +15,7 @@ import {
   PopulatedBlueprintInstance,
   PopulatedComponentInstance,
   PopulatedLayoutInstance,
+  PopulatedFragmentInstance,
 } from '../validation';
 import {
   UserInstance,
@@ -37,6 +38,7 @@ declare global {
       requestedBlueprint: PopulatedBlueprintInstance;
       requestedComponent: PopulatedComponentInstance;
       requestedLayout: PopulatedLayoutInstance;
+      requestedFragment: PopulatedFragmentInstance;
       componentBlueprint: BlueprintInstance;
       sanitizedContent: unknown;
       layoutComponents: ComponentInstance[];
