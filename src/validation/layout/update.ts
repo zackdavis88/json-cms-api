@@ -6,6 +6,10 @@ import { validateComponents } from './utils';
 export const update = async (req: Request, res: Response, next: NextFunction) => {
   const { name, components } = req.body;
 
+  if (!name && !components) {
+    return res.validationError('request contains no update data');
+  }
+
   const isRequired = false;
   const nameError = await validateName(name, isRequired);
   if (nameError) {

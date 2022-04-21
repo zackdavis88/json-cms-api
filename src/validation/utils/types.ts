@@ -4,6 +4,7 @@ import {
   ComponentInstance,
   UserInstance,
   LayoutInstance,
+  FragmentInstance,
 } from '../../models';
 export type ValidationError = mongoose.NativeError | string;
 
@@ -75,4 +76,10 @@ export interface PopulatedLayoutInstance
   createdBy?: UserInstance;
   updatedBy?: UserInstance;
   components?: ComponentInstance[];
+}
+
+export interface PopulatedFragmentInstance
+  extends Omit<FragmentInstance, 'createdBy' | 'updatedBy'> {
+  createdBy?: UserInstance;
+  updatedBy?: UserInstance;
 }

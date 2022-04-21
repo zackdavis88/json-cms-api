@@ -8,3 +8,4 @@ export { blueprintUpdatePayload } from './blueprint_update_payload';
 
 export { defaultComponentContent } from './default_component_content';
 export { defaultComponentUpdateContent } from './default_component_update_content';
+export { defaultFragmentContent } from './default_fragment_content';

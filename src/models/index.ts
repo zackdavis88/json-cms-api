@@ -21,3 +21,5 @@ export { BlueprintVersion, BlueprintVersionInstance } from './blueprint_version'
 export { ComponentVersion, ComponentVersionInstance } from './component_version';
 
 export { Layout, LayoutTypes, LayoutInstance } from './layout';
+
+export { Fragment, FragmentTypes, FragmentInstance } from './fragment';
