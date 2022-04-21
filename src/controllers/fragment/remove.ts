@@ -16,7 +16,6 @@ export const remove = async (req: Request, res: Response) => {
 
   const fragmentData = {
     fragment: {
-      id: requestedFragment._id,
       name: requestedFragment.name,
       isActive: requestedFragment.isActive,
       createdOn: requestedFragment.createdOn,

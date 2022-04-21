@@ -12,7 +12,10 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 
   let fragment: FragmentInstance;
   try {
-    fragment = await Fragment.findOne({ name: name, isActive: true }).exec();
+    fragment = await Fragment.findOne({
+      name: name.toLowerCase(),
+      isActive: true,
+    }).exec();
   } catch (findExistingFragmentError) {
     return res.fatalError(findExistingFragmentError);
   }

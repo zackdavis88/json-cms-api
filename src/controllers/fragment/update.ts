@@ -6,7 +6,7 @@ export const update = async (req: Request, res: Response) => {
   const { user, requestedFragment } = req;
 
   if (name) {
-    requestedFragment.name = name;
+    requestedFragment.name = name.toLowerCase();
   }
 
   if (content) {

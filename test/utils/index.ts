@@ -5,6 +5,7 @@ export {
   addBlueprintForCleanup,
   addComponentForCleanup,
   addLayoutForCleanup,
+  addFragmentForCleanup,
 } from './database_cleanup';
 export { getServerUrl } from './get_server_url';
 export { createTestUser } from './create_test_user';
@@ -15,6 +16,7 @@ export { updateTestBlueprint } from './update_test_blueprint';
 export { createTestComponent } from './create_test_component';
 export { updateTestComponent } from './update_test_component';
 export { createTestLayout } from './create_test_layout';
+export { createTestFragment } from './create_test_fragment';
 
 export {
   UserInstance,
@@ -25,6 +27,7 @@ export {
   ComponentInstance,
   ComponentVersionInstance,
   LayoutInstance,
+  FragmentInstance,
 } from '../../src/models';
 export { Connection } from 'mongoose';
 
@@ -35,4 +38,5 @@ export {
   blueprintUpdatePayload,
   defaultComponentContent,
   defaultComponentUpdateContent,
+  defaultFragmentContent,
 } from './data';

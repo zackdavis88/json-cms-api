@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { QueryArgs, escapeRegex } from '../../validation';
-import { Fragment, FragmentInstance } from '../../models';
+import { QueryArgs, escapeRegex, PopulatedFragmentInstance } from '../../validation';
+import { Fragment, UserInstance } from '../../models';
 import { getUserInfo } from '../utils';
 
 export const getAll = async (req: Request, res: Response) => {
@@ -14,12 +14,14 @@ export const getAll = async (req: Request, res: Response) => {
     };
   }
 
-  let fragments: FragmentInstance[];
+  let fragments: PopulatedFragmentInstance[];
   try {
     fragments = await Fragment.find(queryArgs)
       .sort({ createdOn: 'asc' })
       .skip(pageOffset)
       .limit(itemsPerPage)
+      .populate<{ createdBy: UserInstance }>('createdBy', '-_id username displayName')
+      .populate<{ updatedBy: UserInstance }>('updatedBy', '-_id username displayName')
       .exec();
   } catch (findAllError) {
     return res.fatalError(findAllError);
@@ -31,7 +33,6 @@ export const getAll = async (req: Request, res: Response) => {
     totalItems,
     itemsPerPage,
     fragments: fragments.map((fragment) => ({
-      id: fragment._id,
       name: fragment.name,
       createdOn: fragment.createdOn,
       updatedOn: fragment.updatedOn,

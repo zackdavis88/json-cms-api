@@ -6,7 +6,7 @@ export const create = async (req: Request, res: Response) => {
   const { user } = req;
 
   const newFragment = {
-    name,
+    name: name.toLowerCase(),
     content,
     isActive: true,
     createdOn: new Date(),

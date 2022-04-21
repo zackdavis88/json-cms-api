@@ -6,7 +6,6 @@ export const getOne = (req: Request, res: Response) => {
 
   const fragmentData = {
     fragment: {
-      id: requestedFragment._id,
       name: requestedFragment.name,
       content: requestedFragment.content,
       createdOn: requestedFragment.createdOn,

@@ -58,7 +58,7 @@ describe('[Layout] Update', () => {
     beforeEach(() => {
       apiRoute = `/layouts/${testLayout._id}`;
       payload = {
-        name: 'unit-test-component-updated',
+        name: 'unit-test-layout-updated',
         components: [testComponent1._id],
       };
     });

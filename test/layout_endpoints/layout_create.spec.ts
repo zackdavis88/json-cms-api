@@ -48,7 +48,7 @@ describe('[Layout] Create', () => {
 
     beforeEach(() => {
       payload = {
-        name: 'unit-test-component',
+        name: 'unit-test-layout',
         components: [testComponent1._id, testComponent2._id, testComponent3._id],
       };
     });

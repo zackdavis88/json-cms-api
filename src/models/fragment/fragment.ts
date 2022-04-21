@@ -16,7 +16,7 @@ export interface FragmentTypes {
 const FragmentSchema = new mongoose.Schema<FragmentTypes>({
   name: String,
   isActive: Boolean,
-  content: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Component' }],
+  content: mongoose.Schema.Types.Mixed,
   createdOn: Date,
   updatedOn: Date,
   deletedOn: Date,
