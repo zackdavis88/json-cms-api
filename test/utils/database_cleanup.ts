@@ -4,11 +4,13 @@ import {
   BlueprintVersion,
   Component,
   ComponentVersion,
+  Layout,
 } from '../../src/models';
 
 let cleanupUsernames: string[] = [];
 let cleanupBlueprints: string[] = [];
 let cleanupComponents: string[] = [];
+let cleanupLayouts: string[] = [];
 
 const cleanupTestUsers = (callback: () => void) => {
   if (!cleanupUsernames.length) return callback();
@@ -56,12 +58,25 @@ const cleanupTestComponents = (callback: () => void) => {
   });
 };
 
+const cleanupTestLayouts = (callback: () => void) => {
+  if (!cleanupLayouts.length) return callback();
+
+  Layout.deleteMany({ _id: { $in: cleanupLayouts } }, (err) => {
+    if (err) return console.error(err);
+
+    cleanupLayouts = [];
+    callback();
+  });
+};
+
 export const cleanupTestRecords = () =>
   new Promise<void>((resolve) => {
     cleanupTestUsers(() => {
       cleanupTestComponents(() => {
         cleanupTestBlueprints(() => {
-          resolve();
+          cleanupTestLayouts(() => {
+            resolve();
+          });
         });
       });
     });
@@ -79,5 +94,10 @@ export const addBlueprintForCleanup = (blueprintId: string) => {
 
 export const addComponentForCleanup = (componentId: string) => {
   cleanupComponents.push(componentId);
+  return;
+};
+
+export const addLayoutForCleanup = (layoutId: string) => {
+  cleanupLayouts.push(layoutId);
   return;
 };

@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
-import { BlueprintInstance, ComponentInstance, UserInstance } from '../../models';
+import {
+  BlueprintInstance,
+  ComponentInstance,
+  UserInstance,
+  LayoutInstance,
+} from '../../models';
 export type ValidationError = mongoose.NativeError | string;
 
 export type ModelTypes = mongoose.Model<unknown>;
@@ -63,4 +68,11 @@ export interface PopulatedComponentInstance
   createdBy?: UserInstance;
   updatedBy?: UserInstance;
   blueprint: BlueprintInstance;
+}
+
+export interface PopulatedLayoutInstance
+  extends Omit<LayoutInstance, 'createdBy' | 'updatedBy' | 'components'> {
+  createdBy?: UserInstance;
+  updatedBy?: UserInstance;
+  components?: ComponentInstance[];
 }

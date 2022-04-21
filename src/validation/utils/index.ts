@@ -17,4 +17,5 @@ export {
   BlueprintField,
   PopulatedBlueprintInstance,
   PopulatedComponentInstance,
+  PopulatedLayoutInstance,
 } from './types';
