@@ -30,7 +30,10 @@ export const update = async (req: Request, res: Response) => {
       createdOn: requestedLayout.createdOn,
       updatedOn: requestedLayout.updatedOn,
       createdBy: getUserInfo(requestedLayout, 'createdBy'),
-      updatedBy: getUserInfo(requestedLayout, 'updatedBy'),
+      updatedBy: {
+        username: user.username,
+        displayName: user.displayName,
+      },
       components: requestedLayout.components.map((componentInstance) => {
         const component = componentLayoutMap[componentInstance._id.toString()];
         return {

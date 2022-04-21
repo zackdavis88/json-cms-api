@@ -64,6 +64,17 @@ describe('[Blueprint] Remove', () => {
       );
     });
 
+    it('should reject requests when the requested blueprint is not found', (done) => {
+      apiRoute = '/blueprints/impo$$ibleId';
+      request(serverUrl).delete(apiRoute).set('x-auth-token', authToken).expect(
+        404,
+        {
+          error: 'requested blueprint not found',
+        },
+        done,
+      );
+    });
+
     it('should reject requests when confirm is missing', (done) => {
       payload.confirm = undefined;
       request(serverUrl)

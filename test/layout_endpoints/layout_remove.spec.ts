@@ -8,22 +8,20 @@ import {
   generateToken,
   Connection,
   UserInstance,
-  BlueprintInstance,
-  ComponentInstance,
   createTestComponent,
+  createTestLayout,
+  LayoutInstance,
 } from '../utils';
 import request from 'supertest';
-import { ComponentVersion, ComponentVersionInstance } from '../../src/models';
-let apiRoute = '/components/:componentId';
+let apiRoute = '/layouts/:layoutId';
 const serverUrl = getServerUrl();
 
-describe('[Component] Remove', () => {
+describe('[Layout] Remove', () => {
   describe(`DELETE ${apiRoute}`, () => {
     let connection: Connection;
     let testUser: UserInstance;
-    let testBlueprint: BlueprintInstance;
     let authToken: string;
-    let testComponent: ComponentInstance;
+    let testLayout: LayoutInstance;
     let payload: {
       confirm?: unknown;
     };
@@ -33,9 +31,10 @@ describe('[Component] Remove', () => {
       if (!connection) return 'could not connect to db';
 
       testUser = await createTestUser('Password1');
-      testBlueprint = await createTestBlueprint(testUser);
+      const testBlueprint = await createTestBlueprint(testUser);
       authToken = generateToken(testUser);
-      testComponent = await createTestComponent(testUser, testBlueprint);
+      const testComponent = await createTestComponent(testUser, testBlueprint);
+      testLayout = await createTestLayout(testUser, [testComponent]);
     });
 
     afterAll(async () => {
@@ -44,8 +43,8 @@ describe('[Component] Remove', () => {
     });
 
     beforeEach(() => {
-      apiRoute = `/components/${testComponent._id}`;
-      payload = { confirm: testComponent.name };
+      apiRoute = `/layouts/${testLayout._id}`;
+      payload = { confirm: testLayout.name };
     });
 
     it('should reject requests when x-auth-token is missing', (done) => {
@@ -58,23 +57,23 @@ describe('[Component] Remove', () => {
       );
     });
 
-    it('should reject requests when the componentId is invalid', (done) => {
-      apiRoute = '/components/a';
+    it('should reject requests when the layoutId is invalid', (done) => {
+      apiRoute = '/layouts/bad';
       request(serverUrl).delete(apiRoute).set('x-auth-token', authToken).expect(
         400,
         {
-          error: 'componentId is not valid',
+          error: 'layoutId is not valid',
         },
         done,
       );
     });
 
-    it('should reject requests when the requested component is not found', (done) => {
-      apiRoute = '/components/impo$$ibleId';
+    it('should reject requests when the requested layout is not found', (done) => {
+      apiRoute = '/layouts/impo$$ibleId';
       request(serverUrl).delete(apiRoute).set('x-auth-token', authToken).expect(
         404,
         {
-          error: 'requested component not found',
+          error: 'requested layout not found',
         },
         done,
       );
@@ -96,7 +95,7 @@ describe('[Component] Remove', () => {
     });
 
     it('should reject requests when confirm is not a string', (done) => {
-      payload.confirm = true;
+      payload.confirm = { do: 'it' };
       request(serverUrl)
         .delete(apiRoute)
         .set('x-auth-token', authToken)
@@ -119,13 +118,13 @@ describe('[Component] Remove', () => {
         .expect(
           400,
           {
-            error: 'confirm input must match the component name',
+            error: 'confirm input must match the layout name',
           },
           done,
         );
     });
 
-    it('should successfully remove a component', (done) => {
+    it('should successfully remove a layout', (done) => {
       request(serverUrl)
         .delete(apiRoute)
         .set('x-auth-token', authToken)
@@ -134,40 +133,26 @@ describe('[Component] Remove', () => {
         .end(async (err, res) => {
           if (err) return done(err);
 
-          const { message, component } = res.body;
+          const { message, layout } = res.body;
 
-          assert.strictEqual(message, 'component has been successfully removed');
-          assert(component);
-          assert.strictEqual(component.id, testComponent.id);
-          assert.strictEqual(component.isActive, false);
-          assert.strictEqual(component.name, testComponent.name);
+          assert.strictEqual(message, 'layout has been successfully removed');
+          assert(layout);
+          assert.strictEqual(layout.id, testLayout.id);
+          assert.strictEqual(layout.isActive, false);
+          assert.strictEqual(layout.name, testLayout.name);
           assert.strictEqual(
-            new Date(component.createdOn).toString(),
-            new Date(testComponent.createdOn).toString(),
+            new Date(layout.createdOn).toString(),
+            new Date(testLayout.createdOn).toString(),
           );
-          assert(component.createdBy);
-          assert.strictEqual(component.createdBy.username, testUser.username);
-          assert.strictEqual(component.createdBy.displayName, testUser.displayName);
+          assert(layout.createdBy);
+          assert.strictEqual(layout.createdBy.username, testUser.username);
+          assert.strictEqual(layout.createdBy.displayName, testUser.displayName);
 
-          assert(component.deletedOn);
-          assert(component.deletedBy);
-          assert.strictEqual(component.deletedBy.username, testUser.username);
-          assert.strictEqual(component.deletedBy.displayName, testUser.displayName);
+          assert(layout.deletedOn);
+          assert(layout.deletedBy);
+          assert.strictEqual(layout.deletedBy.username, testUser.username);
+          assert.strictEqual(layout.deletedBy.displayName, testUser.displayName);
 
-          let componentVersion: ComponentVersionInstance;
-          try {
-            componentVersion = await ComponentVersion.findOne({
-              componentId: testComponent._id,
-              version: testComponent.version,
-            }).exec();
-          } catch (err) {
-            return done(err);
-          }
-
-          assert.deepStrictEqual(
-            componentVersion.toObject().content,
-            testComponent.toObject().content,
-          );
           done();
         });
     });

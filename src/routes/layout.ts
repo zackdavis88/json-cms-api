@@ -17,5 +17,6 @@ export const layoutRoutes = (router: Router) => {
       LayoutValidation.getOne,
     )
     .get(LayoutController.getOne)
-    .post(LayoutValidation.update, LayoutController.update);
+    .post(LayoutValidation.update, LayoutController.update)
+    .delete(LayoutValidation.remove, LayoutController.remove);
 };
